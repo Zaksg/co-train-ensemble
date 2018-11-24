@@ -4,23 +4,10 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/App.java" line="41" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5666a6b6-4ebe-4e90-934b-a8a100ec7191" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_findbugs_jsr305_1_3_9.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_errorprone_error_prone_annotations_2_1_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_25_0_jre.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_j2objc_j2objc_annotations_1_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_protobuf_protobuf_java_2_6_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__mysql_mysql_connector_java_8_0_11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_checkerframework_checker_compat_qual_2_0_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_mojo_animal_sniffer_annotations_1_14.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/java.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/weka.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaDataGeneration.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/GeneralFunctions/EvaluationAnalysisFunctions.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java" />
+    <list default="true" id="5666a6b6-4ebe-4e90-934b-a8a100ec7191" name="Default" comment="paired t test in the batch meta features">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -42,11 +29,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="InstanceAttributes.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java">
+      <file leaf-file-name="InstancesBatchAttributes.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="529">
-              <caret line="419" column="17" lean-forward="false" selection-start-line="419" selection-start-column="17" selection-end-line="419" selection-end-column="17" />
+            <state relative-caret-position="697">
+              <caret line="268" column="0" lean-forward="true" selection-start-line="268" selection-start-column="0" selection-end-line="268" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -54,32 +41,26 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ScoreDistributionBasedAttributes.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ScoreDistributionBasedAttributes.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="598">
-              <caret line="831" column="17" lean-forward="true" selection-start-line="831" selection-start-column="17" selection-end-line="831" selection-end-column="17" />
-              <folding />
+            <state relative-caret-position="451">
+              <caret line="566" column="130" lean-forward="false" selection-start-line="566" selection-start-column="92" selection-end-line="566" selection-end-column="130" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InstancesBatchAttributes.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java">
+      <file leaf-file-name="InstanceAttributes.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="22" column="50" lean-forward="false" selection-start-line="22" selection-start-column="50" selection-end-line="22" selection-end-column="50" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CoTrainingMetaLearning.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4074">
-              <caret line="209" column="63" lean-forward="false" selection-start-line="209" selection-start-column="63" selection-end-line="209" selection-end-column="63" />
-              <folding />
+            <state relative-caret-position="2205">
+              <caret line="102" column="53" lean-forward="false" selection-start-line="102" selection-start-column="27" selection-end-line="102" selection-end-column="53" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,8 +76,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>indicesOfTrainingFolds</find>
-      <find>getTestDataMatrixWithDistinctVals</find>
       <find>indicesOfTestFolds</find>
       <find>numOfTrainingInstancesPerClass</find>
       <find>generateSet</find>
@@ -125,6 +104,8 @@
       <find>con</find>
       <find>calculatePercentileClassificationResults</find>
       <find>mino</find>
+      <find>chi</find>
+      <find>t-te</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -179,11 +160,11 @@
         <option value="$PROJECT_DIR$/src/main/resources/config.properties" />
         <option value="80165f1b-5c3c-4e28-8b8a-182266e34285/consoles/cotrain" />
         <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainerOriginal.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/GeneralFunctions/EvaluationAnalysisFunctions.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java" />
       </list>
     </option>
   </component>
@@ -241,89 +222,55 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="AndroidView" />
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="CoTrainingVerticalEnsemble" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CoTrainingVerticalEnsemble" type="462c0819:PsiDirectoryNode" />
+              <item name="co-train-ensemble" type="b2602c69:ProjectViewProjectNode" />
+              <item name="co-train-ensemble" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="CoTrainingVerticalEnsemble" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CoTrainingVerticalEnsemble" type="462c0819:PsiDirectoryNode" />
+              <item name="co-train-ensemble" type="b2602c69:ProjectViewProjectNode" />
+              <item name="co-train-ensemble" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="CoTrainingVerticalEnsemble" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CoTrainingVerticalEnsemble" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CoTrainingVerticalEnsemble" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CoTrainingVerticalEnsemble" type="462c0819:PsiDirectoryNode" />
+              <item name="co-train-ensemble" type="b2602c69:ProjectViewProjectNode" />
+              <item name="co-train-ensemble" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="CoTrainingVerticalEnsemble" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CoTrainingVerticalEnsemble" type="462c0819:PsiDirectoryNode" />
+              <item name="co-train-ensemble" type="b2602c69:ProjectViewProjectNode" />
+              <item name="co-train-ensemble" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="verticalEnsemble" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="CoTrainingVerticalEnsemble" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CoTrainingVerticalEnsemble" type="462c0819:PsiDirectoryNode" />
+              <item name="co-train-ensemble" type="b2602c69:ProjectViewProjectNode" />
+              <item name="co-train-ensemble" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="verticalEnsemble" type="462c0819:PsiDirectoryNode" />
-              <item name="CoTrainers" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="CoTrainingVerticalEnsemble" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CoTrainingVerticalEnsemble" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="verticalEnsemble" type="462c0819:PsiDirectoryNode" />
-              <item name="Data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CoTrainingVerticalEnsemble" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CoTrainingVerticalEnsemble" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="verticalEnsemble" type="462c0819:PsiDirectoryNode" />
-              <item name="GeneralFunctions" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CoTrainingVerticalEnsemble" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CoTrainingVerticalEnsemble" type="462c0819:PsiDirectoryNode" />
+              <item name="co-train-ensemble" type="b2602c69:ProjectViewProjectNode" />
+              <item name="co-train-ensemble" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="verticalEnsemble" type="462c0819:PsiDirectoryNode" />
               <item name="MetaLearning" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="CoTrainingVerticalEnsemble" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CoTrainingVerticalEnsemble" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -540,37 +487,41 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21535982" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32692307" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32801822" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5806818" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Sequence" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936507" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24382384" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24758324" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973147" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4861933" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32801822" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32918552" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="paired t test in the batch meta features" />
+    <option name="LAST_COMMIT_MESSAGE" value="paired t test in the batch meta features" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -970,7 +921,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2453">
           <caret line="47" column="47" lean-forward="true" selection-start-line="47" selection-start-column="47" selection-end-line="47" selection-end-column="47" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -993,7 +943,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="483">
           <caret line="26" column="21" lean-forward="false" selection-start-line="26" selection-start-column="11" selection-end-line="26" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1009,10 +958,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="10" column="24" lean-forward="false" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="24" />
-          <folding>
-            <element signature="e#246#247#0" expanded="false" />
-            <element signature="e#287#288#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1020,17 +965,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding>
-            <element signature="e#635#636#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4074">
-          <caret line="209" column="63" lean-forward="false" selection-start-line="209" selection-start-column="63" selection-end-line="209" selection-end-column="63" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1046,9 +980,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
           <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding>
-            <element signature="e#772#773#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1063,33 +994,44 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="556">
           <caret line="413" column="0" lean-forward="true" selection-start-line="413" selection-start-column="0" selection-end-line="413" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="781">
+          <caret line="209" column="63" lean-forward="false" selection-start-line="209" selection-start-column="63" selection-end-line="209" selection-end-column="63" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="22" column="50" lean-forward="false" selection-start-line="22" selection-start-column="50" selection-end-line="22" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="419" column="17" lean-forward="false" selection-start-line="419" selection-start-column="17" selection-end-line="419" selection-end-column="17" />
+        <state relative-caret-position="451">
+          <caret line="566" column="130" lean-forward="false" selection-start-line="566" selection-start-column="92" selection-end-line="566" selection-end-column="130" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="598">
-          <caret line="831" column="17" lean-forward="true" selection-start-line="831" selection-start-column="17" selection-end-line="831" selection-end-column="17" />
-          <folding />
+        <state relative-caret-position="2205">
+          <caret line="102" column="53" lean-forward="false" selection-start-line="102" selection-start-column="27" selection-end-line="102" selection-end-column="53" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="268" column="0" lean-forward="true" selection-start-line="268" selection-start-column="0" selection-end-line="268" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

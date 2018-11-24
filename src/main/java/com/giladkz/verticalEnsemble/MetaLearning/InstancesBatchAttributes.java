@@ -5,6 +5,9 @@ import com.giladkz.verticalEnsemble.Data.Column;
 import com.giladkz.verticalEnsemble.Data.Dataset;
 import com.giladkz.verticalEnsemble.Data.EvaluationPerIteraion;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.inference.TTest;
+import org.apache.commons.math3.stat.inference.ChiSquareTest;
+
 
 import java.util.*;
 
@@ -184,6 +187,81 @@ public class InstancesBatchAttributes {
 
         //distance statistics
         //use: distanceBatchPairsPerPartition
+
+
+        //paired t-test
+        TTest batchTtest = new TTest();
+        DescriptiveStatistics batchPartitionIterationBackTtestScore = new DescriptiveStatistics();
+        DescriptiveStatistics batchIterationBackTtestScore = new DescriptiveStatistics();
+        for (Integer partitionIndex : evaluationResultsPerSetAndInteration.keySet()){
+            double[][] currentIterScoreDist = evaluationResultsPerSetAndInteration.get(partitionIndex).getIterationEvaluationInfo(currentIterationIndex).getScoreDistributions();
+            double[] currentIterationTargetClassScoreDistribution = new double[currentIterScoreDist.length];
+            for (int i = 0; i < currentIterScoreDist.length; i++) {
+                currentIterationTargetClassScoreDistribution[i] = currentIterScoreDist[i][targetClassIndex];
+            }
+            for (int numOfIterationsBack : numOfIterationsBackToAnalyze) {
+                if (currentIterationIndex >= numOfIterationsBack) {
+                    double[][] prevIterScoreDist = evaluationResultsPerSetAndInteration.get(partitionIndex).getIterationEvaluationInfo(currentIterationIndex).getScoreDistributions();
+                    double[] prevIterationTargetClassScoreDistribution = new double[prevIterScoreDist.length];
+                    for (int j = 0; j < currentIterScoreDist.length; j++) {
+                        prevIterationTargetClassScoreDistribution[j] = prevIterScoreDist[j][targetClassIndex];
+                    }
+                    double batchTTestStatistic = batchTtest.pairedT(currentIterationTargetClassScoreDistribution, prevIterationTargetClassScoreDistribution);
+                    batchPartitionIterationBackTtestScore.addValue(batchTTestStatistic);
+                    batchIterationBackTtestScore.addValue(batchTTestStatistic);
+                    //insert t-test to the attributes
+                    AttributeInfo batchTTestStatisticAttr = new AttributeInfo
+                            ("batchTtestScoreOnPartition_"+partitionIndex+"_iterationBack_"+numOfIterationsBack, Column.columnType.Numeric, batchTTestStatistic, testDataset.getNumOfClasses());
+                    instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchTTestStatisticAttr);
+                }
+                else{
+                    AttributeInfo batchTTestStatisticAttr = new AttributeInfo
+                            ("batchTtestScoreOnPartition_"+partitionIndex+"_iterationBack_"+numOfIterationsBack, Column.columnType.Numeric, -1, testDataset.getNumOfClasses());
+                    instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchTTestStatisticAttr);
+                }
+            }
+            //max
+            AttributeInfo batchPartitionTtestScoreMax = new AttributeInfo
+                    ("batchPartition_" +partitionIndex+"_TtestScoreMax", Column.columnType.Numeric, batchPartitionIterationBackTtestScore.getMax(), -1);
+            instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchPartitionTtestScoreMax);
+            //min
+            AttributeInfo batchPartitionTtestScoreMin = new AttributeInfo
+                    ("batchPartition_" +partitionIndex+"_TtestScoreMin", Column.columnType.Numeric, batchPartitionIterationBackTtestScore.getMin(), -1);
+            instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchPartitionTtestScoreMin);
+            //mean
+            AttributeInfo batchPartitionTtestScoreMean = new AttributeInfo
+                    ("batchPartition_"+partitionIndex+"_TtestScoreMean", Column.columnType.Numeric, batchPartitionIterationBackTtestScore.getMean(), -1);
+            instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchPartitionTtestScoreMean);
+            //std
+            AttributeInfo batchPartitionTtestScoreStd = new AttributeInfo
+                    ("batchPartition_"+partitionIndex+"_TtestScoreStd", Column.columnType.Numeric, batchPartitionIterationBackTtestScore.getStandardDeviation(), -1);
+            instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchPartitionTtestScoreStd);
+            //p-50
+            AttributeInfo batchPartitionTtestScoreMedian = new AttributeInfo
+                    ("batchPartition_"+partitionIndex+"_TtestScoreMedian", Column.columnType.Numeric, batchPartitionIterationBackTtestScore.getPercentile(50), -1);
+            instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchPartitionTtestScoreMedian);
+        }
+        //statistics on T-test scores for all batch
+        //max
+        AttributeInfo batchTtestScoreMax = new AttributeInfo
+                ("batchTtestScoreMax", Column.columnType.Numeric, batchIterationBackTtestScore.getMax(), -1);
+        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchTtestScoreMax);
+        //min
+        AttributeInfo batchTtestScoreMin = new AttributeInfo
+                ("batchTtestScoreMin", Column.columnType.Numeric, batchIterationBackTtestScore.getMin(), -1);
+        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchTtestScoreMin);
+        //mean
+        AttributeInfo batchTtestScoreMean = new AttributeInfo
+                ("batchTtestScoreMean", Column.columnType.Numeric, batchIterationBackTtestScore.getMean(), -1);
+        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchTtestScoreMean);
+        //std
+        AttributeInfo batchTtestScoreStd = new AttributeInfo
+                ("batchTtestScoreStd", Column.columnType.Numeric, batchIterationBackTtestScore.getStandardDeviation(), -1);
+        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchTtestScoreStd);
+        //p-50
+        AttributeInfo batchTtestScoreMedian = new AttributeInfo
+                ("batchTtestScoreMedian", Column.columnType.Numeric, batchIterationBackTtestScore.getPercentile(50), -1);
+        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchTtestScoreMedian);
 
         return instanceAttributesToReturn;
     }
