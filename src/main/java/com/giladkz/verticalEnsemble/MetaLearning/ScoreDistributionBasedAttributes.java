@@ -72,7 +72,7 @@ public class ScoreDistributionBasedAttributes {
             //start by getting the EvaluationInfo object of the respective iterations for each partition
             HashMap<Integer,EvaluationInfo> partitionsIterationEvaulatioInfos = new HashMap<>();
             for (int partitionIndex : evaluationResultsPerSetAndInteration.keySet()) {
-                partitionsIterationEvaulatioInfos.put(partitionIndex, evaluationResultsPerSetAndInteration.get(partitionIndex).getIterationEvaluationInfo(i));
+                partitionsIterationEvaulatioInfos.put(partitionIndex, evaluationResultsPerSetAndInteration.get(partitionIndex).getIterationEvaluationInfo(currentIterationIndex));
             }
 
             //next, calculate the averaging score of the iteration
@@ -187,7 +187,7 @@ public class ScoreDistributionBasedAttributes {
         //endregion
 
         //now we use a pair of loops to analyze every pair of partitions once
-        for (int i=0; i<allPartitionsAndDistributions.size()-1; i++) {
+/*        for (int i=0; i<allPartitionsAndDistributions.size()-1; i++) {
             for (int j=1; j<allPartitionsAndDistributions.size(); j++) {
                 if (i != j) {
                     TreeMap<Integer, AttributeInfo> crossPartitionFeatures = calculateScoreDistributionStatisticsOverMultipleSetsAndIterations(currentIterationIndex,
@@ -197,7 +197,7 @@ public class ScoreDistributionBasedAttributes {
                     }
                 }
             }
-        }
+        }*/
         //endregion
 
 
@@ -719,7 +719,7 @@ public class ScoreDistributionBasedAttributes {
 
         HashMap<Integer,Double> samplesConfidenceScoreValues = new HashMap<>();
         Random rnd = new Random(Integer.parseInt(properties.getProperty("randomSeed")));
-        while (samplesConfidenceScoreValues.size() < 4500) {
+        while (samplesConfidenceScoreValues.size() < Math.min(scoreDistributions.length,4500)) {
             int pos = rnd.nextInt(scoreDistributions.length);
             if (!samplesConfidenceScoreValues.containsKey(pos)) {
                 samplesConfidenceScoreValues.put(pos, scoreDistributions[pos][targetClassIndex]);
@@ -727,6 +727,7 @@ public class ScoreDistributionBasedAttributes {
         }
 
         List<Double> pValuesList = Arrays.asList(0.01, 0.05, 0.1);
+/*
 
         //region Normal distribution
         //Used to test normal distribution
@@ -788,6 +789,7 @@ public class ScoreDistributionBasedAttributes {
         //endregion
 
         //endregion
+*/
 
         //region Statistical tests on the correlations of features whose instances are partitioned by confidence thresholds
 
@@ -815,7 +817,7 @@ public class ScoreDistributionBasedAttributes {
                     int aboveThresholdCounter = 0;
                     double[] values = (double[])ci.getColumn().getValues();
                     for (int i=0; i<values.length; i++) {
-                        if (indicesOfIndicesOverTheThreshold.get(i)) {
+                        if (indicesOfIndicesOverTheThreshold.containsKey(i)) {
                             aboveThresholdValues[aboveThresholdCounter] = values[i];
                             aboveThresholdCounter++;
                         }
@@ -824,10 +826,13 @@ public class ScoreDistributionBasedAttributes {
                             belowThresholdCounter++;
                         }
                     }
-                    TTest tTest = new TTest();
-                    double tTestStatistic = tTest.t(aboveThresholdValues,belowThresholdValues);
-                    allFeatureCorrelationStatsByThreshold.get(threshold).addValue(tTestStatistic);
-                    numericFeatureCorrelationStatsByThreshold.get(threshold).addValue(tTestStatistic);
+                    if (aboveThresholdCounter > 0){
+                        TTest tTest = new TTest();
+                        double tTestStatistic = tTest.t(aboveThresholdValues,belowThresholdValues);
+                        allFeatureCorrelationStatsByThreshold.get(threshold).addValue(tTestStatistic);
+                        numericFeatureCorrelationStatsByThreshold.get(threshold).addValue(tTestStatistic);
+                    }
+
                 }
                 if (ci.getColumn().getType() == Column.columnType.Discrete) {
                     int[] belowThresholdValues = new int[scoreDistributions.length-indicesOfIndicesOverTheThreshold.size()];
@@ -836,7 +841,7 @@ public class ScoreDistributionBasedAttributes {
                     int aboveThresholdCounter = 0;
                     int[] values = (int[])ci.getColumn().getValues();
                     for (int i=0; i<values.length; i++) {
-                        if (indicesOfIndicesOverTheThreshold.get(i)) {
+                        if (indicesOfIndicesOverTheThreshold.containsKey(i)) {
                             aboveThresholdValues[aboveThresholdCounter] = values[i];
                             aboveThresholdCounter++;
                         }

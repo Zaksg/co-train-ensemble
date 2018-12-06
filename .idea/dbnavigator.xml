@@ -58,6 +58,7 @@ from
         <condition column="batch_id" operator="=" value="" active="true" />
       </filter>
     </filter-list>
+    <filter-list connection-id="80165f1b-5c3c-4e28-8b8a-182266e34285" dataset="cotrain.tbl_Score_Distribution_Meta_Data" active-filter-id="" />
     <filter-list connection-id="80165f1b-5c3c-4e28-8b8a-182266e34285" dataset="cotrain.tbl_Co_Training_Added_Samples" active-filter-id="EMPTY_FILTER">
       <filter id="644e3c81-4c7c-417f-b2e2-ca80c694615d" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="classifier_id" operator="=" value="" active="true" />

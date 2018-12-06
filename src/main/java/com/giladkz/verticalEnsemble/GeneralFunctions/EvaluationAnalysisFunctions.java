@@ -26,7 +26,7 @@ public class EvaluationAnalysisFunctions {
         //now we normalize
         for (int i=0; i<resultsToReturn.length; i++) {
             for (int j=0; j<numOfClasses; j++) {
-                resultsToReturn[i][j] = resultsToReturn[i][j] / numOfClasses;
+                 resultsToReturn[i][j] = resultsToReturn[i][j] / numOfClasses;
             }
         }
         return normalizeClassificationResults(resultsToReturn);
