@@ -62,8 +62,8 @@ CREATE TABLE `tbl_Instance_In_Batch` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --batches score 
-DROP TABLE IF EXISTS `tbl_Instance_In_Batch`;
-CREATE TABLE `tbl_Instance_In_Batch` (
+DROP TABLE IF EXISTS `tbl_Batchs_Score`;
+CREATE TABLE `tbl_Batchs_Score` (
 	`exp_id` int(11) NOT NULL,
 	`exp_iteration` int(11) NOT NULL,
 	`batch_id` int(11) NOT NULL,

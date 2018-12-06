@@ -38,8 +38,8 @@ public class App
         DiscretizerAbstract discretizer = new EqualRangeBinsDiscretizer(Integer.parseInt(properties.getProperty("numOfDiscretizationBins")));
         FeatureSelectorInterface featuresSelector = new RandomParitionFeatureSelector();
         ValueFunctionInterface valueFunction = new RandomValues();
-        //CoTrainerAbstract coTrainer = new CoTrainingMetaLearning();
-        CoTrainerAbstract coTrainer = new CoTrainerOriginal();
+        CoTrainerAbstract coTrainer = new CoTrainingMetaLearning();
+        //CoTrainerAbstract coTrainer = new CoTrainerOriginal();
         List<Integer> sizeOfLabeledTrainingSet= Arrays.asList( 100);
 
 

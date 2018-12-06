@@ -25,7 +25,9 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="80165f1b-5c3c-4e28-8b8a-182266e34285">
-        <schema name="cotrain" object-types="table" />
+        <schema name="cotrain" object-types="column, constraint, function, index, procedure, table, dataset trigger, view" />
+        <schema name="information_schema" object-types="function, procedure, table, view" />
+        <schema name="mysql" object-types="function, procedure, table, view" />
       </connection>
     </loaded-nodes>
   </component>
@@ -66,6 +68,7 @@ from
         <condition column="exp_id" operator="=" value="" active="true" />
       </filter>
     </filter-list>
+    <filter-list connection-id="80165f1b-5c3c-4e28-8b8a-182266e34285" dataset="cotrain.tbl_Batchs_Score" active-filter-id="" />
     <filter-list connection-id="80165f1b-5c3c-4e28-8b8a-182266e34285" dataset="cotrain.tbl_Meta_Data_Batch_Info" active-filter-id="EMPTY_FILTER">
       <filter id="37b696b0-b746-4a5f-8154-355f9f8da8b9" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="batch_id" operator="=" value="" active="true" />

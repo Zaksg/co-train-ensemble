@@ -46,10 +46,9 @@ public class ScoreDistributionBasedAttributes {
      * @return
      * @throws Exception
      */
-    public TreeMap<Integer,AttributeInfo> getScoreDistributionBasedAttributes(Dataset trainingDataset, Dataset testDataset, int currentIterationIndex,
-                                                                              TreeMap<Integer, EvaluationPerIteraion> evaluationResultsPerSetAndInteration,
-                                                                              EvaluationPerIteraion unifiedDatasetEvaulationResults,
-                                                                              int targetClassIndex, Properties properties) throws Exception {
+    public TreeMap<Integer,AttributeInfo> getScoreDistributionBasedAttributes(Dataset trainingDataset, Dataset testDataset
+            , int currentIterationIndex, TreeMap<Integer, EvaluationPerIteraion> evaluationResultsPerSetAndInteration,
+             EvaluationPerIteraion unifiedDatasetEvaulationResults, int targetClassIndex, Properties properties) throws Exception {
 
         TreeMap<Integer,AttributeInfo> attributes = new TreeMap<>();
 

@@ -17,6 +17,7 @@ import java.util.*;
 public class InstancesBatchAttributes {
 
     private List<Integer> numOfIterationsBackToAnalyze = Arrays.asList(1,3,5,10);
+    private List<Double> confidenceScoreThresholds = Arrays.asList(0.5001, 0.75, 0.9, 0.95);
 
     /**
      *
@@ -193,8 +194,10 @@ public class InstancesBatchAttributes {
         Random rnd = new Random(Integer.parseInt(properties.getProperty("randomSeed")));
         HashMap<Integer, HashMap<Integer, double[]>> randomSampleScores = new HashMap<>(); //instancePos -> partition -> both class
         HashMap<Integer, DescriptiveStatistics[]> axisStatsPerPartitionMap = new HashMap<>(); //partition -> stats per class
+        HashMap<Integer, DescriptiveStatistics> distancePerPartitionMap = new HashMap<>(); //partition -> euclidean distance
         for (Integer partitionIndex : evaluationResultsPerSetAndInteration.keySet()) {
             axisStatsPerPartitionMap.put(partitionIndex, new DescriptiveStatistics[2]); //2 = number of classes
+            distancePerPartitionMap.put(partitionIndex, new DescriptiveStatistics());
         }
         int randSizeSample = Math.min(trainingDataset.getNumberOfRows(),1000);
         //generate random sampling and store by instance, partition and scores
@@ -215,6 +218,7 @@ public class InstancesBatchAttributes {
             }
         }
         //calculating avg per partition and axis
+        DescriptiveStatistics distanceBatchCrossPartition = new DescriptiveStatistics();
         for (Integer batchInstancePos: assignedLabels.keySet()) {
             for (Integer partitionIndex : evaluationResultsPerSetAndInteration.keySet()) {
                 double euclideanDistBatch = 0.0;
@@ -228,10 +232,58 @@ public class InstancesBatchAttributes {
                 AttributeInfo euclideanDistBatchAttr = new AttributeInfo
                         ("batchDistanceFromAvgPartition_"+partitionIndex+"_instance_" + batchInstancePos, Column.columnType.Numeric, euclideanDistBatch, testDataset.getNumOfClasses());
                 instanceAttributesToReturn.put(instanceAttributesToReturn.size(), euclideanDistBatchAttr);
+                distancePerPartitionMap.get(partitionIndex).addValue(euclideanDistBatch);
+                distanceBatchCrossPartition.addValue(euclideanDistBatch);
             }
         }
+        //statistics for batch distances
+        for (int i = 0; i < distancePerPartitionMap.size() ; i++) {
+            //max
+            AttributeInfo batchDistancePerPartitionMax = new AttributeInfo
+                    ("batchDistancePerPartitionMax_"+i, Column.columnType.Numeric, distancePerPartitionMap.get(i).getMax(), -1);
+            instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchDistancePerPartitionMax);
+            //min
+            AttributeInfo batchDistancePerPartitionMin = new AttributeInfo
+                    ("batchDistancePerPartitionMin_"+i, Column.columnType.Numeric, distancePerPartitionMap.get(i).getMin(), -1);
+            instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchDistancePerPartitionMin);
+            //mean
+            AttributeInfo batchDistancePerPartitionMean = new AttributeInfo
+                    ("batchDistancePerPartitionMean_"+i, Column.columnType.Numeric, distancePerPartitionMap.get(i).getMean(), -1);
+            instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchDistancePerPartitionMean);
+            //std
+            AttributeInfo batchDistancePerPartitionStd = new AttributeInfo
+                    ("batchDistancePerPartitionStd_"+i, Column.columnType.Numeric, distancePerPartitionMap.get(i).getStandardDeviation(), -1);
+            instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchDistancePerPartitionStd);
+            //p-50
+            AttributeInfo batchDistancePerPartitionMedian = new AttributeInfo
+                    ("batchDistancePerPartitionMedian_"+i, Column.columnType.Numeric, distancePerPartitionMap.get(i).getPercentile(50), -1);
+            instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchDistancePerPartitionMedian);
+        }
+        //stats for distance cross partition
+        //max
+        AttributeInfo batchDistanceCrossPartitionMax = new AttributeInfo
+                ("batchDistanceCrossPartitionMax", Column.columnType.Numeric, distanceBatchCrossPartition.getMax(), -1);
+        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchDistanceCrossPartitionMax);
+        //min
+        AttributeInfo batchDistanceCrossPartitionMin = new AttributeInfo
+                ("batchDistanceCrossPartitionMin", Column.columnType.Numeric, distanceBatchCrossPartition.getMin(), -1);
+        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchDistanceCrossPartitionMin);
+        //mean
+        AttributeInfo batchDistanceCrossPartitionMean = new AttributeInfo
+                ("batchDistanceCrossPartitionMean", Column.columnType.Numeric, distanceBatchCrossPartition.getMean(), -1);
+        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchDistanceCrossPartitionMean);
+        //std
+        AttributeInfo batchDistancecrossPartitionStd = new AttributeInfo
+                ("batchDistanceCrossPartitionStd", Column.columnType.Numeric, distanceBatchCrossPartition.getStandardDeviation(), -1);
+        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchDistancecrossPartitionStd);
+        //p-50
+        AttributeInfo batchDistanceCrossPartitionMedian = new AttributeInfo
+                ("batchDistanceCrossPartitionMedian", Column.columnType.Numeric, distanceBatchCrossPartition.getPercentile(50), -1);
+        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchDistanceCrossPartitionMedian);
+
         //paired t-test
-        TTest batchTtest = new TTest();
+        TTest batchTtest;
+        ChiSquareTest batchChiSquareTest;
         DescriptiveStatistics batchPartitionIterationBackTtestScore = new DescriptiveStatistics();
         DescriptiveStatistics batchIterationBackTtestScore = new DescriptiveStatistics();
         for (Integer partitionIndex : evaluationResultsPerSetAndInteration.keySet()){
@@ -247,6 +299,8 @@ public class InstancesBatchAttributes {
                     for (int j = 0; j < currentIterScoreDist.length; j++) {
                         prevIterationTargetClassScoreDistribution[j] = prevIterScoreDist[j][targetClassIndex];
                     }
+                    //t-test
+                    batchTtest = new TTest();
                     double batchTTestStatistic = batchTtest.pairedT(currentIterationTargetClassScoreDistribution, prevIterationTargetClassScoreDistribution);
                     batchPartitionIterationBackTtestScore.addValue(batchTTestStatistic);
                     batchIterationBackTtestScore.addValue(batchTTestStatistic);
@@ -254,6 +308,9 @@ public class InstancesBatchAttributes {
                     AttributeInfo batchTTestStatisticAttr = new AttributeInfo
                             ("batchTtestScoreOnPartition_"+partitionIndex+"_iterationBack_"+numOfIterationsBack, Column.columnType.Numeric, batchTTestStatistic, testDataset.getNumOfClasses());
                     instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchTTestStatisticAttr);
+                    //chi square
+
+                    batchChiSquareTest = new ChiSquareTest();
                 }
                 else{
                     AttributeInfo batchTTestStatisticAttr = new AttributeInfo
