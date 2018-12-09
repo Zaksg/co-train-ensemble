@@ -5,6 +5,7 @@ import com.giladkz.verticalEnsemble.Data.EvaluationPerIteraion;
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class EvaluationAnalysisFunctions {
@@ -89,8 +90,20 @@ public class EvaluationAnalysisFunctions {
                 scoreToPercentile[instance] = (iterationScoreDistPerPartition.get(partition)[instance][targetClassIndex]);
             }
             Percentile p = new Percentile();
+
+/*            double[] normalizedScoreToPercentile = new double[scoreToPercentile.length];
+            double max = Arrays.stream(normalizedScoreToPercentile).max().getAsDouble();
+            double min = Arrays.stream(normalizedScoreToPercentile).min().getAsDouble();
+            for (int i = 0; i < scoreToPercentile.length; i++) {
+                normalizedScoreToPercentile[i] = ((scoreToPercentile[i] - min)/(max - min))*100;
+            }
+            double normValToCals = ((scoreToPercentile[instancePos]- min)/(max - min))*100;
+            p.setData(normalizedScoreToPercentile);
+            resultsToReturn[partition] = p.evaluate(normValToCals);*/
+
             p.setData(scoreToPercentile);
             resultsToReturn[partition] = p.evaluate(scoreToPercentile[instancePos]);
+
         }
         return resultsToReturn;
     }

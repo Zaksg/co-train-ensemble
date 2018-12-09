@@ -34,19 +34,13 @@
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="80165f1b-5c3c-4e28-8b8a-182266e34285">
       <console name="cotrain" type="STANDARD"><![CDATA[select
-    te.arff_name,
-    te.classifier,
-    te.co_trainer,
-    te.discretizer,
-    te.exp_id,
-    te.feature_selector,
-    te.item_insertion_policy,
-    te.labeled_training_set_size,
-    te.num_of_training_iterations,
-    te.start_date,
-    te.value_function
+    tsdmd.exp_id,
+    tsdmd.exp_iteration,
+    tsdmd.inner_iteration_id,
+    tsdmd.meta_feature_name,
+    tsdmd.meta_feature_value
 from
-    tbl_Experiments te;]]></console>
+    `tbl_Score_Distribution_Meta_Data` tsdmd;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">

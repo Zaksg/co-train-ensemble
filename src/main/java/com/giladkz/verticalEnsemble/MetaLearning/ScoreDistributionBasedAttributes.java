@@ -116,7 +116,7 @@ public class ScoreDistributionBasedAttributes {
         for (int pos : generalMultiplicationStatisticsAttributes.keySet()) {
             currentScoreDistributionStatistics.put(currentScoreDistributionStatistics.size(), generalMultiplicationStatisticsAttributes.get(pos));
         }
-
+        attributes.putAll(currentScoreDistributionStatistics);
 
         //endregion
         //endregion
@@ -159,6 +159,7 @@ public class ScoreDistributionBasedAttributes {
         for (int pos : multiplicationIterationBasedAttributes.keySet()) {
             iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), multiplicationIterationBasedAttributes.get(pos));
         }
+        attributes.putAll(iterationsBasedStatisticsAttributes);
         //endregion
         //endregion
 
@@ -199,9 +200,6 @@ public class ScoreDistributionBasedAttributes {
             }
         }*/
         //endregion
-
-
-
 
 
         return attributes;
@@ -422,28 +420,28 @@ public class ScoreDistributionBasedAttributes {
                 //endregion
 
                 //region Instance-level values
-                AttributeInfo maxAvgPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesAverageOfMaxDelta" + "_" + identifier, Column.columnType.Numeric, -1, -1);
-                AttributeInfo maxStdevPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesStdevOfMaxDelta" + "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo maxAvgPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesAverageOfMaxDelta" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
+                AttributeInfo maxStdevPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesStdevOfMaxDelta" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), maxAvgPerInstanceAtt);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), maxStdevPerInstanceAtt);
 
-                AttributeInfo minAvgPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesAverageOfMinDelta" + "_" + identifier, Column.columnType.Numeric, -1, -1);
-                AttributeInfo minStdevPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesStdevOfMinDelta" + "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo minAvgPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesAverageOfMinDelta" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
+                AttributeInfo minStdevPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesStdevOfMinDelta" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), minAvgPerInstanceAtt);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), minStdevPerInstanceAtt);
 
-                AttributeInfo avgAvgPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesAverageOfAvgDelta" + "_" + identifier, Column.columnType.Numeric, -1, -1);
-                AttributeInfo avgStdevPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesStdevOfAvgDelta" + "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo avgAvgPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesAverageOfAvgDelta" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
+                AttributeInfo avgStdevPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesStdevOfAvgDelta" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), avgAvgPerInstanceAtt);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), avgStdevPerInstanceAtt);
 
-                AttributeInfo stdevAvgPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesAverageOfStdevDelta" + "_" + identifier, Column.columnType.Numeric, -1, -1);
-                AttributeInfo stdevStdevPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesStdevOfStdevDelta" + "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo stdevAvgPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesAverageOfStdevDelta" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
+                AttributeInfo stdevStdevPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesStdevOfStdevDelta" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), stdevAvgPerInstanceAtt);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), stdevStdevPerInstanceAtt);
 
-                AttributeInfo medianAvgPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesAverageOfMedianDelta" + "_" + identifier, Column.columnType.Numeric, -1, -1);
-                AttributeInfo medianStdevPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesStdevOfMedianDelta" + "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo medianAvgPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesAverageOfMedianDelta" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
+                AttributeInfo medianStdevPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesStdevOfMedianDelta" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), medianAvgPerInstanceAtt);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), medianStdevPerInstanceAtt);
                 //endregion
@@ -499,19 +497,19 @@ public class ScoreDistributionBasedAttributes {
             }
             else {
                 //region If there are not enough iterations yet, place -1 everywhere
-                AttributeInfo maxDeltaHistoAtt = new AttributeInfo("maxDeltaScoreDistHisto_" + numOfIterationsBack + "IterationsBack" + "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo maxDeltaHistoAtt = new AttributeInfo("maxDeltaScoreDistHisto_" + numOfIterationsBack + "IterationsBack" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), maxDeltaHistoAtt);
 
-                AttributeInfo minDeltaHistoAtt = new AttributeInfo("maxDeltaScoreDistHisto_" + numOfIterationsBack + "IterationsBack" + "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo minDeltaHistoAtt = new AttributeInfo("maxDeltaScoreDistHisto_" + numOfIterationsBack + "IterationsBack" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), minDeltaHistoAtt);
 
-                AttributeInfo avgDeltaHistoAtt = new AttributeInfo("maxDeltaScoreDistHisto_" + numOfIterationsBack + "IterationsBack" + "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo avgDeltaHistoAtt = new AttributeInfo("maxDeltaScoreDistHisto_" + numOfIterationsBack + "IterationsBack" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), avgDeltaHistoAtt);
 
-                AttributeInfo stdevDeltaHistoAtt = new AttributeInfo("maxDeltaScoreDistHisto_" + numOfIterationsBack + "IterationsBack" + "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo stdevDeltaHistoAtt = new AttributeInfo("maxDeltaScoreDistHisto_" + numOfIterationsBack + "IterationsBack" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), stdevDeltaHistoAtt);
 
-                AttributeInfo medianDeltaHistoAtt = new AttributeInfo("maxDeltaScoreDistHisto_" + numOfIterationsBack + "IterationsBack" + "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo medianDeltaHistoAtt = new AttributeInfo("maxDeltaScoreDistHisto_" + numOfIterationsBack + "IterationsBack" + "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), medianDeltaHistoAtt);
                 //endregion
             }
@@ -563,19 +561,19 @@ public class ScoreDistributionBasedAttributes {
             }
             else {
                 //region Fill with -1 values if we don't have the required iterations
-                AttributeInfo maxTTestStatisticForScoreDistributionAtt = new AttributeInfo("maxTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo maxTTestStatisticForScoreDistributionAtt = new AttributeInfo("maxTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), maxTTestStatisticForScoreDistributionAtt);
 
-                AttributeInfo minTTestStatisticForScoreDistributionAtt = new AttributeInfo("minTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo minTTestStatisticForScoreDistributionAtt = new AttributeInfo("minTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), maxTTestStatisticForScoreDistributionAtt);
 
-                AttributeInfo avgTTestStatisticForScoreDistributionAtt = new AttributeInfo("maxTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo avgTTestStatisticForScoreDistributionAtt = new AttributeInfo("maxTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), maxTTestStatisticForScoreDistributionAtt);
 
-                AttributeInfo stdevTTestStatisticForScoreDistributionAtt = new AttributeInfo("stdevTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo stdevTTestStatisticForScoreDistributionAtt = new AttributeInfo("stdevTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), stdevTTestStatisticForScoreDistributionAtt);
 
-                AttributeInfo medianTTestStatisticForScoreDistributionAtt = new AttributeInfo("medianTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, -1, -1);
+                AttributeInfo medianTTestStatisticForScoreDistributionAtt = new AttributeInfo("medianTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), medianTTestStatisticForScoreDistributionAtt);
                 //endregion
             }
@@ -617,7 +615,7 @@ public class ScoreDistributionBasedAttributes {
             else {
                 //generate attributes with -1 values if we don't have sufficient iterations
                 for (double threshold : confidenceScoreThresholds) {
-                    AttributeInfo labelPercetageChangeAtt = new AttributeInfo("labelPercentageChangeFor_" + numOfIterationsBack + "IterationsBack" + "_threshold_" + threshold+ "_" + identifier, Column.columnType.Numeric, -1, -1);
+                    AttributeInfo labelPercetageChangeAtt = new AttributeInfo("labelPercentageChangeFor_" + numOfIterationsBack + "IterationsBack" + "_threshold_" + threshold+ "_" + identifier, Column.columnType.Numeric, -1.0, -1);
                     iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), labelPercetageChangeAtt);
                 }
             }
@@ -727,13 +725,13 @@ public class ScoreDistributionBasedAttributes {
         }
 
         List<Double> pValuesList = Arrays.asList(0.01, 0.05, 0.1);
-/*
+
 
         //region Normal distribution
         //Used to test normal distribution
         //https://www.programcreek.com/java-api-examples/index.php?source_dir=datumbox-framework-master/src/main/java/com/datumbox/framework/statistics/nonparametrics/onesample/ShapiroWilk.java
         ShapiroWilk sh = new ShapiroWilk();
-        FlatDataCollection fdc1 = new FlatDataCollection(Arrays.asList(samplesConfidenceScoreValues.values()));
+        FlatDataCollection fdc1 = new FlatDataCollection(Arrays.asList(samplesConfidenceScoreValues.values().toArray()));
         for (double pval : pValuesList) {
             boolean isNormallyDistributed = sh.test(fdc1, pval);
             normalDistributionGoodnessOfFitPVAlues.put(pval, isNormallyDistributed);
@@ -744,7 +742,6 @@ public class ScoreDistributionBasedAttributes {
             generalStatisticsAttributes.put(generalStatisticsAttributes.size(), normalDistributionAtt);
         }
         //endregion
-
         //region Log-normal distribution
         //Used to test logarithmic distribution
         //In order to check whether something is lognormal, we simply need to use ln(x) on the values (taking cate of 0's) and then check for normal distribution
@@ -752,7 +749,7 @@ public class ScoreDistributionBasedAttributes {
         for (Integer key: samplesConfidenceScoreValues.keySet()) {
             logNormalSamplesConfidenceScoreValues.put(key, 1 + samplesConfidenceScoreValues.get(key));
         }
-        FlatDataCollection fdc2 = new FlatDataCollection(Arrays.asList(logNormalSamplesConfidenceScoreValues.values()));
+        FlatDataCollection fdc2 = new FlatDataCollection(Arrays.asList(logNormalSamplesConfidenceScoreValues.values().toArray()));
         for (double pval : pValuesList) {
             boolean isLogNormallyDistributed = sh.test(fdc2, pval);
             logNormalDistributionGoodnessOfFitPVAlue.put(pval, isLogNormallyDistributed);
@@ -775,7 +772,7 @@ public class ScoreDistributionBasedAttributes {
         //Now we create the objects needed for the Kolmogorov-Smirnov test
         TransposeDataList transposeDataList = new TransposeDataList();
         transposeDataList.put(0, new FlatDataList(Arrays.asList(uniformRandomVals))); //the random values
-        transposeDataList.put(1, new FlatDataList(Arrays.asList(samplesConfidenceScoreValues.values()))); //the values we sampled from the results
+        transposeDataList.put(1, new FlatDataList(Arrays.asList(samplesConfidenceScoreValues.values().toArray()))); //the values we sampled from the results
 
         for (double pval : pValuesList) {
             boolean isUniformlyDistributed = KolmogorovSmirnovIndependentSamples.test(transposeDataList, true, pval);
@@ -789,7 +786,6 @@ public class ScoreDistributionBasedAttributes {
         //endregion
 
         //endregion
-*/
 
         //region Statistical tests on the correlations of features whose instances are partitioned by confidence thresholds
 

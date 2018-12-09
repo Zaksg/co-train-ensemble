@@ -199,10 +199,10 @@ public class InstancesBatchAttributes {
             axisStatsPerPartitionMap.put(partitionIndex, new DescriptiveStatistics[2]); //2 = number of classes
             distancePerPartitionMap.put(partitionIndex, new DescriptiveStatistics());
         }
-        int randSizeSample = Math.min(trainingDataset.getNumberOfRows(),1000);
+        int randSizeSample = Math.min((int)Math.round(trainingDataset.getNumberOfRows()*0.5),1000);
         //generate random sampling and store by instance, partition and scores
-        while (randomSampleScores.size() <= randSizeSample){
-            int rndInstancePosition = rnd.nextInt(randSizeSample);
+        while (randomSampleScores.size() < randSizeSample){
+            int rndInstancePosition = rnd.nextInt(Math.min((int)Math.round(trainingDataset.getNumberOfRows()),1000));
             if (!randomSampleScores.containsKey(rndInstancePosition)) {
                 HashMap<Integer, double[]> instancePartitionscoreTemp = new HashMap<>();
                 for (Integer partitionIndex : evaluationResultsPerSetAndInteration.keySet()) {
@@ -211,7 +211,9 @@ public class InstancesBatchAttributes {
 
                     //add classes to statistics calcs
                     for (int i = 0; i < instanceScoreDistRnd.length; i++) {
-                        axisStatsPerPartitionMap.get(partitionIndex)[i].addValue(instanceScoreDistRnd[i]);
+                        DescriptiveStatistics temp = new DescriptiveStatistics();
+                        temp.addValue(instanceScoreDistRnd[i]);
+                        axisStatsPerPartitionMap.get(partitionIndex)[i] = temp;
                     }
                 }
                 randomSampleScores.put(rndInstancePosition, instancePartitionscoreTemp);
@@ -361,6 +363,16 @@ public class InstancesBatchAttributes {
                 ("batchTtestScoreMedian", Column.columnType.Numeric, batchIterationBackTtestScore.getPercentile(50), -1);
         instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchTtestScoreMedian);
 
+        //fix NaN: convert to -1.0
+//        for (Map.Entry<Integer,AttributeInfo> entry : instanceAttributesToReturn.entrySet()){
+//            AttributeInfo ai = entry.getValue();
+//            if (ai.getAttributeType() == Column.columnType.Numeric){
+//                double aiVal = (double) ai.getValue();
+//                if (Double.isNaN(aiVal)){
+//                    ai.setValue(-1.0);
+//                }
+//            }
+//        }
         return instanceAttributesToReturn;
     }
 }

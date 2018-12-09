@@ -33,4 +33,8 @@ public class AttributeInfo {
     public int getNumOfDiscreteValues() {
         return numOfDiscreteValues;
     }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
 }
