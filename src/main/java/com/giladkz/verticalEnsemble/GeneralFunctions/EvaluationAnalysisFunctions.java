@@ -87,7 +87,11 @@ public class EvaluationAnalysisFunctions {
         for (int partition : iterationScoreDistPerPartition.keySet()) {
             double[] scoreToPercentile = new double[iterationScoreDistPerPartition.get(partition).length];
             for (int instance = 0; instance < iterationScoreDistPerPartition.get(partition).length; instance++){
-                scoreToPercentile[instance] = (iterationScoreDistPerPartition.get(partition)[instance][targetClassIndex]);
+                double instanceScore = iterationScoreDistPerPartition.get(partition)[instance][targetClassIndex];
+                if (instanceScore == 0.0){
+                    instanceScore = 0.0001;
+                }
+                scoreToPercentile[instance] = instanceScore;
             }
             Percentile p = new Percentile();
 

@@ -261,7 +261,8 @@ public abstract class CoTrainerAbstract {
      */
     public void GetIndicesOfInstancesToLabelBasic(Dataset dataset, HashMap<Integer, Integer> instances_per_class_per_iteration,
                                               HashMap<Integer, EvaluationPerIteraion> evaluationResultsPerSetAndInteration,
-                                              HashMap<Integer,HashMap<Integer,Double>> instancesToAddPerClass, int randomSeed, List<Integer> unlabeledTrainingSetIndices,
+                                              HashMap<Integer,HashMap<Integer,Double>> instancesToAddPerClass, int randomSeed,
+                                                  List<Integer> unlabeledTrainingSetIndices,
                                               HashMap<Integer, List<Integer>> instancesPerPartition) {
 
         List<Integer> indicesOfAddedInstances = new ArrayList<>();
@@ -288,7 +289,6 @@ public abstract class CoTrainerAbstract {
                                 instancesToAddPerClass.get(classIndex).put(actualIndexInUnlabaledSet, confidenceScore);
                                 //add the instance index to the object denoting by which classifier the decision was made
                                 instancesPerPartition.get(partitionIndex).add(actualIndexInUnlabaledSet);
-
                                 indicesOfAddedInstances.add(actualIndexInUnlabaledSet);
                                 counter++;
                             }
@@ -340,6 +340,100 @@ public abstract class CoTrainerAbstract {
         }
     }
 
+    /**
+     * Gets the indices of the instances which the co-training algorithm would like to label for the following
+     * training iteration. IMPORTANT: the indices are 0...n because of the way Weka processes the results. These
+     * indices NEED TO BE CONVERTED to the "real" indices of analyzed dataset
+     * @param dataset
+     * @param instances_per_class_per_iteration
+     * @param evaluationResultsPerSetAndInteration
+     * @param selectedInstancesRelativeIndexes
+     * @param instancesToAddPerClass
+     */
+    public void GetIndicesOfInstancesToLabelBasicRelativeIndex(Dataset dataset, HashMap<Integer, Integer> instances_per_class_per_iteration,
+                                                  HashMap<Integer, EvaluationPerIteraion> evaluationResultsPerSetAndInteration,
+                                                  HashMap<Integer,HashMap<Integer,Double>> instancesToAddPerClass, int randomSeed,
+                                                  List<Integer> unlabeledTrainingSetIndices,
+                                                  HashMap<Integer, List<Integer>> instancesPerPartition,
+                                                  HashMap<Integer, Integer> selectedInstancesRelativeIndexes,
+                                                               ArrayList<Integer> indicesOfAddedInstances) {
+
+
+        for (int classIndex=0; classIndex<dataset.getNumOfClasses(); classIndex++) {
+            instancesToAddPerClass.put(classIndex, new HashMap<>());
+
+            for (int partitionIndex : evaluationResultsPerSetAndInteration.keySet()) {
+                //get all the instnaces of the current evaluation, for a given class, ordered by confidence score
+                TreeMap<Double,List<Integer>> rankedItemsPerClass = evaluationResultsPerSetAndInteration.get(partitionIndex).getLatestEvaluationInfo().getTopConfidenceInstancesPerClass(classIndex);
+                if (!instancesPerPartition.containsKey(partitionIndex)) {
+                    instancesPerPartition.put(partitionIndex, new ArrayList<>());
+                }
+
+                int instancesCounter = 0;
+                for (double confidenceScore : rankedItemsPerClass.keySet()) {
+
+                    //first, if the number of instances that have this score is smaller than the number we need, just add everything
+                    if (instancesCounter + rankedItemsPerClass.get(confidenceScore).size() <= instances_per_class_per_iteration.get(classIndex)) {
+                        int counter = 0;
+                        for (int item : rankedItemsPerClass.get(confidenceScore)) {
+                            //Weka returns indices of [0-n], we need to translate it to the indices in the inlabaled training set
+                            int actualIndexInUnlabaledSet = unlabeledTrainingSetIndices.get(item);
+                            if (!indicesOfAddedInstances.contains(actualIndexInUnlabaledSet)) {
+                                instancesToAddPerClass.get(classIndex).put(actualIndexInUnlabaledSet, confidenceScore);
+                                //add the instance index to the object denoting by which classifier the decision was made
+                                instancesPerPartition.get(partitionIndex).add(actualIndexInUnlabaledSet);
+                                selectedInstancesRelativeIndexes.put(item, classIndex);
+                                indicesOfAddedInstances.add(actualIndexInUnlabaledSet);
+                                counter++;
+                            }
+                        }
+                        instancesCounter+=counter;
+                    }
+                    //if this is not the case, we randomly sample the number we need
+                    else {
+                        Random rnd = new Random(randomSeed);
+                        List<Integer> testedActualIndices = new ArrayList<>();
+                        while ((instancesCounter < instances_per_class_per_iteration.get(classIndex)) && (testedActualIndices.size()<rankedItemsPerClass.get(confidenceScore).size())) {
+                            int pos = rnd.nextInt(rankedItemsPerClass.get(confidenceScore).size());
+                            //Weka returns indices of [0-n], we need to translate it to the indices in the inlabaled training set
+                            int indexToTest = rankedItemsPerClass.get(confidenceScore).get(pos);
+                            int actualIndexInUnlabaledSet = unlabeledTrainingSetIndices.get(indexToTest);
+
+                            if (!testedActualIndices.contains(actualIndexInUnlabaledSet)) {
+                                testedActualIndices.add(actualIndexInUnlabaledSet);
+                            }
+                            else {
+                                continue;
+                            }
+
+                            if (!indicesOfAddedInstances.contains(actualIndexInUnlabaledSet)) {
+                                indicesOfAddedInstances.add(actualIndexInUnlabaledSet);
+                                selectedInstancesRelativeIndexes.put(indexToTest, classIndex);
+
+                                //we need to check that the instance has not been added by mistake as another label or already chosen
+                                boolean foundMatch = false;
+                                for (int classIndexIterator : instancesToAddPerClass.keySet()) {
+                                    if (instancesToAddPerClass.get(classIndexIterator).containsKey(actualIndexInUnlabaledSet)) {
+                                        foundMatch = true;
+                                    }
+                                }
+                                if (!foundMatch) {
+                                    instancesToAddPerClass.get(classIndex).put(actualIndexInUnlabaledSet, confidenceScore);
+                                    //add the instance index to the object denoting by which classifier the decision was made
+                                    instancesPerPartition.get(partitionIndex).add(actualIndexInUnlabaledSet);
+                                    instancesCounter++;
+                                }
+                            }
+                        }
+                    }
+
+                    if (instancesCounter >= instances_per_class_per_iteration.get(classIndex)) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
     /**
      * This function trains models on the labeled training set and applies them to the test set. The co-training models
      * are combined using either multiplication or averaging (each result is stored in the

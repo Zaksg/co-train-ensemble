@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -136,18 +137,22 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                 for (int partitionIndex : evaluationResultsPerSetAndInteration.keySet()){
                     //we need 8 distinct instances
                     for (int sampleIndex = 0; sampleIndex < Integer.parseInt(properties.getProperty("instancesPerBatch"))/2; sampleIndex++) {
-                        int arrayIndex = rnd.nextInt(unlabeledTrainingSetIndices.size());
-                        Integer instancePos = unlabeledTrainingSetIndices.get(arrayIndex);
+                        int relativeIndex = rnd.nextInt(unlabeledTrainingSetIndices.size());
+
+                        while(assignedLabelsSelectedIndex.containsKey(relativeIndex)){
+                            relativeIndex = rnd.nextInt(unlabeledTrainingSetIndices.size());
+                        }
+                        Integer instancePos = unlabeledTrainingSetIndices.get(relativeIndex);
                         //add instance pos to batch list
                         instancesBatchOrginalPos.add(instancePos);
-                        instancesBatchSelectedPos.add(arrayIndex);
+                        instancesBatchSelectedPos.add(relativeIndex);
 
                         //ASK GILAD: getScoreDistributions has scores without the instance original position - how to take it?
                         //until fix: arrayIndex == instancePos
                         //calculate instance class
                         int assignedClass;
-                        double scoreClass0 = evaluationResultsPerSetAndInteration.get(partitionIndex).getLatestEvaluationInfo().getScoreDistributions()[arrayIndex][0];
-                        double scoreClass1 = evaluationResultsPerSetAndInteration.get(partitionIndex).getLatestEvaluationInfo().getScoreDistributions()[arrayIndex][1];
+                        double scoreClass0 = evaluationResultsPerSetAndInteration.get(partitionIndex).getLatestEvaluationInfo().getScoreDistributions()[relativeIndex][0];
+                        double scoreClass1 = evaluationResultsPerSetAndInteration.get(partitionIndex).getLatestEvaluationInfo().getScoreDistributions()[relativeIndex][1];
                         if (scoreClass0 > scoreClass1){
                             assignedClass = 0;
                         }
@@ -155,16 +160,16 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                             assignedClass = 1;
                         }
                         assignedLabelsOriginalIndex.put(instancePos, assignedClass);
-                        assignedLabelsSelectedIndex.put(arrayIndex, assignedClass);
+                        assignedLabelsSelectedIndex.put(relativeIndex, assignedClass);
                         //get instance meta features
-                        TreeMap<Integer,AttributeInfo> instanceAttributeCurrentIteration = new TreeMap<>();
-                        instanceAttributeCurrentIteration = instanceAttributes.getInstanceAssignmentMetaFeatures(
-                                unlabeledToMetaFeatures,labeledToMetaFeatures,
+//                        instanceAttributeCurrentIteration = new TreeMap<>();
+                        TreeMap<Integer,AttributeInfo> instanceAttributeCurrentIteration = instanceAttributes.getInstanceAssignmentMetaFeatures(
+                                unlabeledToMetaFeatures,dataset,
                                 i, evaluationResultsPerSetAndInterationTree,
                                 unifiedDatasetEvaulationResults, targetClassIndex/*dataset.getTargetColumnIndex()*/,
-                                arrayIndex, assignedClass, properties);
+                                relativeIndex,instancePos, assignedClass, properties);
                         instanceAttributeCurrentIterationList.add(instanceAttributeCurrentIteration);
-                        writeResultsToInstanceMetaFeatures(instanceAttributeCurrentIteration, i, exp_id, iteration, instancePos, properties, dataset);
+                        writeResultsToInstanceMetaFeatures(instanceAttributeCurrentIteration, i, exp_id, iteration, instancePos, batchIndex, properties, dataset);
 
                     }
                 }
@@ -179,33 +184,41 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
 
                 //TO DO: run the classifier with this batch: on cloned dataset and re-create the run-experiment method (Batches_Score)
                 runClassifierOnSampledBatch(exp_id, iteration, i, batchIndex, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions,assignedLabelsOriginalIndex, labeledTrainingSetIndices, properties);
+                System.out.println("batch: " + batchIndex + ", iteration: " + i);
             }
 
             //step 2 - get the indices of the items we want to label (separately for each class)
             HashMap<Integer,HashMap<Integer,Double>> instancesToAddPerClass = new HashMap<>();
             HashMap<Integer, List<Integer>> instancesPerPartition = new HashMap<>();
+            HashMap<Integer, Integer> selectedInstancesRelativeIndexes = new HashMap<>(); //index (relative) -> assigned class
+            ArrayList<Integer> indicesOfAddedInstances = new ArrayList<>(); //index(original)
             //these are the indices of the array provided to Weka. They need to be converted to the Dataset indices
-            GetIndicesOfInstancesToLabelBasic(dataset, instances_per_class_per_iteration, evaluationResultsPerSetAndInteration, instancesToAddPerClass, random_seed, unlabeledTrainingSetIndices, instancesPerPartition);
+            GetIndicesOfInstancesToLabelBasicRelativeIndex(dataset, instances_per_class_per_iteration, evaluationResultsPerSetAndInteration, instancesToAddPerClass, random_seed, unlabeledTrainingSetIndices, instancesPerPartition, selectedInstancesRelativeIndexes, indicesOfAddedInstances);
 
             super.WriteInformationOnAddedItems(instancesToAddPerClass, i, exp_id,iteration,weight_for_log,instancesPerPartition, properties, dataset);
 
             //selected batch meta-data
-            ArrayList<Integer> instancesBatchPos = new ArrayList<>();
-            HashMap<Integer, Integer> assignedLabels = new HashMap<>();
-            for(int classIndex: instancesToAddPerClass.keySet()){
-                for(int instancePos: instancesToAddPerClass.get(classIndex).keySet()){
-                    instancesBatchPos.add(instancePos);
-                    assignedLabels.put(instancePos, classIndex);
-                }
+            for (Integer instance: selectedInstancesRelativeIndexes.keySet()){
+                Integer originalInstancePos = unlabeledTrainingSetIndices.get(instance);
+                Integer assignedClass = selectedInstancesRelativeIndexes.get(instance);
+                TreeMap<Integer,AttributeInfo> instanceAttributeCurrentIteration = instanceAttributes.getInstanceAssignmentMetaFeatures(
+                        unlabeledToMetaFeatures,dataset,
+                        i, evaluationResultsPerSetAndInterationTree,
+                        unifiedDatasetEvaulationResults, targetClassIndex/*dataset.getTargetColumnIndex()*/,
+                        instance,originalInstancePos, assignedClass, properties);
+//                instanceAttributeCurrentIterationList.add(instanceAttributeCurrentIteration);
+                writeResultsToInstanceMetaFeatures(instanceAttributeCurrentIteration, i, exp_id, iteration, originalInstancePos, -1, properties, dataset);
             }
+
             TreeMap<Integer,AttributeInfo> selectedBatchAttributeCurrentIterationList = new TreeMap<>();
             selectedBatchAttributeCurrentIterationList = instancesBatchAttributes.getInstancesBatchAssignmentMetaFeatures(
                     unlabeledToMetaFeatures,labeledToMetaFeatures,
                     i, evaluationResultsPerSetAndInterationTree,
                     unifiedDatasetEvaulationResults, targetClassIndex/*dataset.getTargetColumnIndex()*/,
-                    instancesBatchPos, assignedLabels, properties);
-            writeResultsToBatchesMetaFeatures(selectedBatchAttributeCurrentIterationList, i, exp_id, iteration*(-1), properties, dataset);
-            writeToInstancesInBatchTbl(iteration*(-1), exp_id, i, instancesBatchPos, properties);
+                    new ArrayList<>(selectedInstancesRelativeIndexes.keySet()), selectedInstancesRelativeIndexes, properties);
+            writeResultsToBatchesMetaFeatures(selectedBatchAttributeCurrentIterationList, i, exp_id, -1 + iteration*(-1), properties, dataset);
+            //TO DO: insert the select instances of batch to the DB
+             writeToInstancesInBatchTbl(iteration*(-1), exp_id, i, indicesOfAddedInstances, properties);
 
             //step 3 - set the class labels of the newly labeled instances to what we THINK they are
             for (int classIndex : instancesToAddPerClass.keySet()) {
@@ -388,12 +401,12 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
     }
 
     private void writeResultsToInstanceMetaFeatures(TreeMap<Integer,AttributeInfo> instanceMetaData, int expID, int expIteration,
-                                                    int innerIteration, int instancePos, Properties properties, Dataset dataset) throws Exception{
+                                                    int innerIteration, int instancePos, int batchId, Properties properties, Dataset dataset) throws Exception{
         String myDriver = properties.getProperty("JDBC_DRIVER");
         String myUrl = properties.getProperty("DatabaseUrl");
         Class.forName(myDriver);
 
-        String sql = "insert into tbl_Instances_Meta_Data (att_id, exp_id, exp_iteration, inner_iteration_id, instance_pos, meta_feature_name, meta_feature_value) values (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into tbl_Instances_Meta_Data (att_id, batch_id, exp_id, exp_iteration, inner_iteration_id, instance_pos, meta_feature_name, meta_feature_value) values (?, ?, ?, ?, ?, ?, ?, ?)";
 
         Connection conn = DriverManager.getConnection(myUrl, properties.getProperty("DBUser"), properties.getProperty("DBPassword"));
 
@@ -409,8 +422,9 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
             preparedStmt.setInt (3, expIteration);
             preparedStmt.setInt(4, innerIteration);
             preparedStmt.setInt(5, instancePos);
-            preparedStmt.setString   (6, metaFeatureName);
-            preparedStmt.setString   (7, metaFeatureValue);
+            preparedStmt.setInt (6, batchId);
+            preparedStmt.setString   (7, metaFeatureName);
+            preparedStmt.setString   (8, metaFeatureValue);
 
             preparedStmt.execute();
             preparedStmt.close();
@@ -458,7 +472,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
         String myUrl = properties.getProperty("DatabaseUrl");
         Class.forName(myDriver);
 
-        String sql = "insert into tbl_Instances_In_Batch(batch_id, exp_id, exp_iteration, instance_id, instnce_pos) values (?, ?, ?, ?, ?)";
+        String sql = "insert into tbl_Instance_In_Batch(batch_id, exp_id, exp_iteration, instance_id, instance_pos) values (?, ?, ?, ?, ?)";
 
         Connection conn = DriverManager.getConnection(myUrl, properties.getProperty("DBUser"), properties.getProperty("DBPassword"));
 

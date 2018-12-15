@@ -316,7 +316,7 @@ public class InstancesBatchAttributes {
                 }
                 else{
                     AttributeInfo batchTTestStatisticAttr = new AttributeInfo
-                            ("batchTtestScoreOnPartition_"+partitionIndex+"_iterationBack_"+numOfIterationsBack, Column.columnType.Numeric, -1, testDataset.getNumOfClasses());
+                            ("batchTtestScoreOnPartition_"+partitionIndex+"_iterationBack_"+numOfIterationsBack, Column.columnType.Numeric, -1.0, testDataset.getNumOfClasses());
                     instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchTTestStatisticAttr);
                 }
             }
@@ -364,15 +364,24 @@ public class InstancesBatchAttributes {
         instanceAttributesToReturn.put(instanceAttributesToReturn.size(), batchTtestScoreMedian);
 
         //fix NaN: convert to -1.0
-//        for (Map.Entry<Integer,AttributeInfo> entry : instanceAttributesToReturn.entrySet()){
-//            AttributeInfo ai = entry.getValue();
-//            if (ai.getAttributeType() == Column.columnType.Numeric){
-//                double aiVal = (double) ai.getValue();
-//                if (Double.isNaN(aiVal)){
-//                    ai.setValue(-1.0);
-//                }
-//            }
-//        }
+        for (Map.Entry<Integer,AttributeInfo> entry : instanceAttributesToReturn.entrySet()){
+            AttributeInfo ai = entry.getValue();
+            if (ai.getAttributeType() == Column.columnType.Numeric){
+                if (ai.getValue() instanceof Double){
+                    double aiVal = (double) ai.getValue();
+                    if (Double.isNaN(aiVal)){
+                        ai.setValue(-1.0);
+                    }
+                }
+                else if (ai.getValue() instanceof Integer){
+                    Double aiVal = new Double((int)ai.getValue());
+                    if (Double.isNaN(aiVal)){
+                        ai.setValue(-1.0);
+                    }
+                }
+
+            }
+        }
         return instanceAttributesToReturn;
     }
 }

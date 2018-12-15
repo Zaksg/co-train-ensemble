@@ -26,21 +26,24 @@
     <loaded-nodes>
       <connection connection-id="80165f1b-5c3c-4e28-8b8a-182266e34285">
         <schema name="cotrain" object-types="column, constraint, function, index, procedure, table, dataset trigger, view" />
-        <schema name="information_schema" object-types="function, procedure, table, view" />
-        <schema name="mysql" object-types="function, procedure, table, view" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="80165f1b-5c3c-4e28-8b8a-182266e34285">
       <console name="cotrain" type="STANDARD"><![CDATA[select
-    tsdmd.exp_id,
-    tsdmd.exp_iteration,
-    tsdmd.inner_iteration_id,
-    tsdmd.meta_feature_name,
-    tsdmd.meta_feature_value
+    timd.att_id,
+    timd.exp_id,
+    timd.exp_iteration,
+    timd.inner_iteration_id,
+    timd.instance_pos,
+    timd.meta_feature_name,
+    timd.meta_feature_value
 from
-    `tbl_Score_Distribution_Meta_Data` tsdmd;]]></console>
+    `tbl_Instances_Meta_Data` timd
+where timd.instance_pos = 24
+order by exp_iteration desc  
+;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
