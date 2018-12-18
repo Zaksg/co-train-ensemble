@@ -4,11 +4,8 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/App.java" line="41" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5666a6b6-4ebe-4e90-934b-a8a100ec7191" name="Default" comment="complete first iteration">
+    <list default="true" id="5666a6b6-4ebe-4e90-934b-a8a100ec7191" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -579,7 +576,14 @@
       <option name="project" value="LOCAL" />
       <updated>1544866362935</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="catch score distribution exceptions over iteration">
+      <created>1545122509010</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1545122509010</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView">
@@ -663,7 +667,8 @@
     <MESSAGE value="score distribution fixes" />
     <MESSAGE value="fixes until writing to batch score tbl" />
     <MESSAGE value="complete first iteration" />
-    <option name="LAST_COMMIT_MESSAGE" value="complete first iteration" />
+    <MESSAGE value="catch score distribution exceptions over iteration" />
+    <option name="LAST_COMMIT_MESSAGE" value="catch score distribution exceptions over iteration" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
