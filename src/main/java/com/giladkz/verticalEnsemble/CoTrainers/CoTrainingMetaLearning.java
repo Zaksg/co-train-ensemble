@@ -507,7 +507,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                 clonedDataset.generateSet(FoldsInfo.foldType.Test,testFold.getIndices()), properties);
         double measureAucBeforeAddBatch = aucBeforeAddBatch.measure
                 (testFoldLabelsBeforeAdding, getSingleClassValueConfidenceScore(evaluationResultsBeforeAdding.getScoreDistributions(),0));
-        writeToBatchScoreTbl(batch_id,expID, expIteration, "auc_before_add_batch", measureAucBeforeAddBatch, testFoldLabelsBeforeAdding.length, properties);
+        writeToBatchScoreTbl(batch_id,expID, innerIteration, "auc_before_add_batch", measureAucBeforeAddBatch, testFoldLabelsBeforeAdding.length, properties);
 
         //add batch instances to the cloned dataset
         ArrayList<Integer> instancesClass0 = new ArrayList<>();
@@ -535,7 +535,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
         double measureAucAfterAddBatch = aucAfterAddBatch.measure
                 (testFoldLabelsAfterAdding, getSingleClassValueConfidenceScore(evaluationResultsAfterAdding.getScoreDistributions(),0));
 
-        writeToBatchScoreTbl(batch_id, expID, expIteration, "auc_after_add_batch", measureAucAfterAddBatch, testFoldLabelsAfterAdding.length, properties);
+        writeToBatchScoreTbl(batch_id, expID, innerIteration, "auc_after_add_batch", measureAucAfterAddBatch, testFoldLabelsAfterAdding.length, properties);
     }
 
 

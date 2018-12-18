@@ -4,15 +4,11 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/App.java" line="41" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5666a6b6-4ebe-4e90-934b-a8a100ec7191" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" />
+    <list default="true" id="5666a6b6-4ebe-4e90-934b-a8a100ec7191" name="Default" comment="complete first iteration">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainerAbstract.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainerAbstract.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/GeneralFunctions/EvaluationAnalysisFunctions.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/GeneralFunctions/EvaluationAnalysisFunctions.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/config.properties" afterPath="$PROJECT_DIR$/src/main/resources/config.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -37,17 +33,17 @@
       <file leaf-file-name="CoTrainingMetaLearning.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
+            <state relative-caret-position="182">
               <caret line="117" column="0" lean-forward="false" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
               <folding>
                 <element signature="docComment;method#generateMetaFeatures#0;class#CoTrainingMetaLearning#0" expanded="false" />
                 <element signature="method#generateMetaFeatures#0;class#CoTrainingMetaLearning#0" expanded="false" />
                 <element signature="method#getDataSetByInstancesIndices#0;class#CoTrainingMetaLearning#0" expanded="false" />
-                <marker date="1544866203557" expanded="true" signature="23373:23534" ph=" INSERT statement (TBL_SCORE_DISTRIBUTION_META_DATA)" />
-                <marker date="1544866203557" expanded="true" signature="25315:25497" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
-                <marker date="1544866203557" expanded="true" signature="26969:27109" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
-                <marker date="1544866203557" expanded="true" signature="28439:28555" ph=" INSERT statement (TBL_INSTANCE_IN_BATCHE)" />
-                <marker date="1544866203557" expanded="true" signature="32666:32804" ph=" INSERT statement (TBL_BATCHE)" />
+                <marker date="1545119190953" expanded="true" signature="23373:23534" ph=" INSERT statement (TBL_SCORE_DISTRIBUTION_META_DATA)" />
+                <marker date="1545119190953" expanded="true" signature="25315:25497" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
+                <marker date="1545119190953" expanded="true" signature="26969:27109" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
+                <marker date="1545119190953" expanded="true" signature="28439:28555" ph=" INSERT statement (TBL_INSTANCE_IN_BATCHE)" />
+                <marker date="1545119190953" expanded="true" signature="32670:32808" ph=" INSERT statement (TBL_BATCHE)" />
               </folding>
             </state>
           </provider>
@@ -56,8 +52,8 @@
       <file leaf-file-name="ScoreDistributionBasedAttributes.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
-              <caret line="130" column="0" lean-forward="false" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
+            <state relative-caret-position="292">
+              <caret line="529" column="89" lean-forward="true" selection-start-line="529" selection-start-column="89" selection-end-line="529" selection-end-column="89" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -65,43 +61,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CoTrainerAbstract.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainerAbstract.java">
+      <file leaf-file-name="InstanceAttributes.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="143">
-              <caret line="358" column="72" lean-forward="false" selection-start-line="358" selection-start-column="72" selection-end-line="358" selection-end-column="72" />
-              <folding>
-                <marker date="1544866021596" expanded="true" signature="3061:3260" ph=" INSERT statement (TBL_TEST_SET_EVALUATION_RESULTS)" />
-                <marker date="1544866021596" expanded="true" signature="4699:4890" ph=" INSERT statement (TBL_CO_TRAINING_ADDED_SAMPLES)" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EvaluationPerIteraion.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/Data/EvaluationPerIteraion.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-672">
-              <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/config.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="17" column="26" lean-forward="false" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="cotrain" pinned="false" current-in-tab="false">
-        <entry file="db://80165f1b-5c3c-4e28-8b8a-182266e34285/consoles/cotrain">
-          <provider selected="true" editor-type-id="0.CONSOLE">
-            <state line="4" column="28" selection-start="93" selection-end="93" vertical-scroll-proportion="-2.3333333" current-schema="cotrain" session-id="MAIN">
+            <state relative-caret-position="-3129">
+              <caret line="310" column="57" lean-forward="false" selection-start-line="310" selection-start-column="57" selection-end-line="310" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -110,7 +74,7 @@
       <file leaf-file-name="App.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
+            <state relative-caret-position="21">
               <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding>
                 <marker date="1544092832358" expanded="true" signature="5239:5299" ph=" SELECT statement (TBL_EXPERIMENTS)" />
@@ -131,7 +95,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tbl_Test_Set_Evaluation_Results</find>
       <find>testDataset</find>
       <find>ARFF</find>
       <find>targetColumnIndex</find>
@@ -161,6 +124,7 @@
       <find>calculateScoreDistributionStatisticsOverMultipleSetsAndIterations</find>
       <find>maxDeltaScoreDistHisto</find>
       <find>ttest</find>
+      <find>paired</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -170,7 +134,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="co-train-ensemble" />
       </map>
     </option>
   </component>
@@ -219,15 +183,15 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainerOriginal.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/App.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/Data/AttributeInfo.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java" />
         <option value="80165f1b-5c3c-4e28-8b8a-182266e34285/consoles/cotrain" />
         <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/GeneralFunctions/EvaluationAnalysisFunctions.java" />
         <option value="$PROJECT_DIR$/src/main/resources/config.properties" />
         <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainerAbstract.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" />
       </list>
     </option>
   </component>
@@ -239,10 +203,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="60" />
-    <option name="y" value="22" />
-    <option name="width" value="1918" />
-    <option name="height" value="1028" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1938" />
+    <option name="height" value="1048" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -285,7 +249,9 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -366,15 +332,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="project.structure.last.edited" value="Problems" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Confirmation" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="SearchEverywhereHistoryKey" value="Shap&#9;FILE&#9;jar://C:/Users/guyz/.m2/repository/com/datumbox/datumbox-framework-core/0.8.1/datumbox-framework-core-0.8.1.jar!/com/datumbox/framework/core/statistics/nonparametrics/onesample/ShapiroWilk.class&#10;mode&#9;PSI&#9;JAVA://com.sun.webkit.Timer.Mode&#10;datas&#9;FILE&#9;file://C:/Users/guyz/Documents/CoTrainingVerticalEnsemble/src/main/java/com/giladkz/verticalEnsemble/Data/Dataset.java&#10;tbl_M&#9;FILE&#9;db://80165f1b-5c3c-4e28-8b8a-182266e34285/objects/schemas/cotrain/tables/tbl_Meta_Data_Added_Batches&#10;write&#9;PSI&#9;JAVA://com.giladkz.verticalEnsemble.CoTrainers.CoTrainerAbstract#writeTestSetEvaluationResults&#10;getIterationEvaluationInfo&#9;PSI&#9;JAVA://com.giladkz.verticalEnsemble.Data.EvaluationPerIteraion#getIterationEvaluationInfo&#10;getMinorityClassIndex&#9;ACTION&#9;null&#10;evalu&#9;PSI&#9;JAVA://com.giladkz.verticalEnsemble.Data.EvaluationPerIteraion&#10;evalIn&#9;PSI&#9;JAVA://com.giladkz.verticalEnsemble.Data.EvaluationInfo&#10;delta&#9;PSI&#9;JAVA://sun.security.x509.DeltaCRLIndicatorExtension&#10;sort&#9;PSI&#9;JAVA://com.giladkz.verticalEnsemble.Data.EvaluationInfo#sortedConfidenceScoresByClass&#10;database&#9;PSI&#9;JAVA://weka.core.converters.DatabaseConnection&#10;tempDirectory&#9;PSI&#9;JAVA://java.io.File.TempDirectory&#10;Train_Classifiers&#9;PSI&#9;JAVA://com.giladkz.verticalEnsemble.CoTrainers.CoTrainerAbstract#Train_Classifiers&#10;CoTrainingMetaLearning&#9;FILE&#9;file://C:/Users/guyz/Documents/לימודים/CoTrainingVerticalEnsemble/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java&#10;TTe&#9;PSI&#9;JAVA://org.apache.commons.math3.stat.inference.TTest" />
@@ -556,7 +520,7 @@
     <option name="remove_strategy" value="false" />
   </component>
   <component name="SvnConfiguration">
-    <configuration>$USER_HOME$/.subversion</configuration>
+    <configuration>C:\Users\guyz\AppData\Roaming\Subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -608,7 +572,14 @@
       <option name="project" value="LOCAL" />
       <updated>1544361302801</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="complete first iteration">
+      <created>1544866362935</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1544866362935</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -626,7 +597,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23523094" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23845327" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32692307" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -634,8 +605,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3133484" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32918552" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3133484" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Sequence" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936507" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -646,8 +617,8 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.49208143" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29411766" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -691,7 +662,8 @@
     <MESSAGE value="write to databases" />
     <MESSAGE value="score distribution fixes" />
     <MESSAGE value="fixes until writing to batch score tbl" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixes until writing to batch score tbl" />
+    <MESSAGE value="complete first iteration" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete first iteration" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -744,22 +716,36 @@
           <option name="timeStamp" value="194" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+          <condition expression="labeledTrainingSetIndices.size() == 116" language="JAVA" />
           <url>file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java</url>
-          <line>195</line>
+          <line>117</line>
           <properties />
-          <option name="timeStamp" value="271" />
+          <option name="timeStamp" value="289" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java</url>
-          <line>239</line>
+          <condition expression="trainingDataset.getIndices().size()==584" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java</url>
+          <line>149</line>
           <properties />
-          <option name="timeStamp" value="276" />
+          <option name="timeStamp" value="300" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java</url>
+          <line>531</line>
+          <properties />
+          <option name="timeStamp" value="302" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java</url>
+          <line>532</line>
+          <properties />
+          <option name="timeStamp" value="303" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="277" />
+      <option name="time" value="304" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -1034,19 +1020,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/Data/EvaluationPerIteraion.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-672">
-          <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/Data/EvaluationInfo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
           <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1062,36 +1039,19 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="93">
           <caret line="83" column="17" lean-forward="true" selection-start-line="83" selection-start-column="17" selection-end-line="83" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2916">
-          <caret line="310" column="57" lean-forward="false" selection-start-line="310" selection-start-column="57" selection-end-line="310" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="546">
-          <caret line="35" column="39" lean-forward="false" selection-start-line="35" selection-start-column="24" selection-end-line="35" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="db://80165f1b-5c3c-4e28-8b8a-182266e34285/consoles/cotrain">
       <provider selected="true" editor-type-id="0.CONSOLE">
-        <state line="4" column="28" selection-start="93" selection-end="93" vertical-scroll-proportion="-2.3333333" current-schema="cotrain" session-id="MAIN">
+        <state line="4" column="28" selection-start="93" selection-end="93" vertical-scroll-proportion="0.0" current-schema="cotrain" session-id="MAIN">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainerAbstract.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
+        <state relative-caret-position="7140">
           <caret line="358" column="72" lean-forward="false" selection-start-line="358" selection-start-column="72" selection-end-line="358" selection-end-column="72" />
           <folding>
             <marker date="1544866021596" expanded="true" signature="3061:3260" ph=" INSERT statement (TBL_TEST_SET_EVALUATION_RESULTS)" />
@@ -1100,9 +1060,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstancesBatchAttributes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="305" column="46" lean-forward="false" selection-start-line="305" selection-start-column="27" selection-end-line="305" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/Data/EvaluationPerIteraion.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/InstanceAttributes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3129">
+          <caret line="310" column="57" lean-forward="false" selection-start-line="310" selection-start-column="57" selection-end-line="310" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
+        <state relative-caret-position="21">
           <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
           <folding>
             <marker date="1544092832358" expanded="true" signature="5239:5299" ph=" SELECT statement (TBL_EXPERIMENTS)" />
@@ -1113,25 +1097,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
+        <state relative-caret-position="182">
           <caret line="117" column="0" lean-forward="false" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
           <folding>
             <element signature="docComment;method#generateMetaFeatures#0;class#CoTrainingMetaLearning#0" expanded="false" />
             <element signature="method#generateMetaFeatures#0;class#CoTrainingMetaLearning#0" expanded="false" />
             <element signature="method#getDataSetByInstancesIndices#0;class#CoTrainingMetaLearning#0" expanded="false" />
-            <marker date="1544866203557" expanded="true" signature="23373:23534" ph=" INSERT statement (TBL_SCORE_DISTRIBUTION_META_DATA)" />
-            <marker date="1544866203557" expanded="true" signature="25315:25497" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
-            <marker date="1544866203557" expanded="true" signature="26969:27109" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
-            <marker date="1544866203557" expanded="true" signature="28439:28555" ph=" INSERT statement (TBL_INSTANCE_IN_BATCHE)" />
-            <marker date="1544866203557" expanded="true" signature="32666:32804" ph=" INSERT statement (TBL_BATCHE)" />
+            <marker date="1545119190953" expanded="true" signature="23373:23534" ph=" INSERT statement (TBL_SCORE_DISTRIBUTION_META_DATA)" />
+            <marker date="1545119190953" expanded="true" signature="25315:25497" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
+            <marker date="1545119190953" expanded="true" signature="26969:27109" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
+            <marker date="1545119190953" expanded="true" signature="28439:28555" ph=" INSERT statement (TBL_INSTANCE_IN_BATCHE)" />
+            <marker date="1545119190953" expanded="true" signature="32670:32808" ph=" INSERT statement (TBL_BATCHE)" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="130" column="0" lean-forward="false" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
+        <state relative-caret-position="292">
+          <caret line="529" column="89" lean-forward="true" selection-start-line="529" selection-start-column="89" selection-end-line="529" selection-end-column="89" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

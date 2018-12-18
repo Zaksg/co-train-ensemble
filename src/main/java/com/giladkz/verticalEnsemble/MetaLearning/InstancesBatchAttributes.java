@@ -303,7 +303,7 @@ public class InstancesBatchAttributes {
                     }
                     //t-test
                     batchTtest = new TTest();
-                    double batchTTestStatistic = batchTtest.pairedT(currentIterationTargetClassScoreDistribution, prevIterationTargetClassScoreDistribution);
+                    double batchTTestStatistic = batchTtest.t(currentIterationTargetClassScoreDistribution, prevIterationTargetClassScoreDistribution);
                     batchPartitionIterationBackTtestScore.addValue(batchTTestStatistic);
                     batchIterationBackTtestScore.addValue(batchTTestStatistic);
                     //insert t-test to the attributes

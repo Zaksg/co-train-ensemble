@@ -250,10 +250,10 @@ public class ScoreDistributionBasedAttributes {
         TreeMap<Integer, HashMap<Integer, Double>> generalPercentageScoresDiffHistogramByIteration = new TreeMap<>();
 
         //The paired T-Test values for the current iteration and one of the previous iterations
-        TreeMap<Integer, Double> pairedTTestValueForCurrentAndPreviousIterations = new TreeMap<>();
+        TreeMap<Integer, Double> tTestValueForCurrentAndPreviousIterations = new TreeMap<>();
 
         //Statistics on the Paired T-Test values of the previous X iterations (not including the current)
-        TreeMap<Integer, DescriptiveStatistics> previousIterationsPairedTTestStatistics = new TreeMap<>();
+        TreeMap<Integer, DescriptiveStatistics> previousIterationsTTestStatistics = new TreeMap<>();
 
         //Statistics on the percentage of instances that changed labels given a confidence threshold and number of iterations back
         TreeMap<Integer, HashMap<Double, Double>> labelChangePercentageByIterationAndThreshold = new TreeMap<>();
@@ -311,12 +311,17 @@ public class ScoreDistributionBasedAttributes {
                 DescriptiveStatistics iterationTempDSAvg = new DescriptiveStatistics();
                 DescriptiveStatistics iterationTempDSStdev = new DescriptiveStatistics();
                 DescriptiveStatistics iterationTempDSMedian = new DescriptiveStatistics();
-                for (int i = currentIteration; i >= (currentIteration - numOfIterationsBack); i--) {
-                    iteraionTempDSMax.addValue(confidenceScoreDifferencesPerSingleIteration.get(i).getMax());
-                    iterationTempDSMin.addValue(confidenceScoreDifferencesPerSingleIteration.get(i).getMin());
-                    iterationTempDSAvg.addValue(confidenceScoreDifferencesPerSingleIteration.get(i).getMean());
-                    iterationTempDSStdev.addValue(confidenceScoreDifferencesPerSingleIteration.get(i).getStandardDeviation());
-                    iterationTempDSMedian.addValue(confidenceScoreDifferencesPerSingleIteration.get(i).getPercentile(50));
+                for (int i = currentIteration; i > (currentIteration - numOfIterationsBack); i--) {
+                    try{
+                        iteraionTempDSMax.addValue(confidenceScoreDifferencesPerSingleIteration.get(i).getMax());
+                        iterationTempDSMin.addValue(confidenceScoreDifferencesPerSingleIteration.get(i).getMin());
+                        iterationTempDSAvg.addValue(confidenceScoreDifferencesPerSingleIteration.get(i).getMean());
+                        iterationTempDSStdev.addValue(confidenceScoreDifferencesPerSingleIteration.get(i).getStandardDeviation());
+                        iterationTempDSMedian.addValue(confidenceScoreDifferencesPerSingleIteration.get(i).getPercentile(50));
+                    }catch (Exception e){
+                        continue;
+                    }
+
                 }
 
                 // Now we extract the AVG and Stdev of these temp statistics
@@ -354,11 +359,16 @@ public class ScoreDistributionBasedAttributes {
                 DescriptiveStatistics instanceTempDSMedian = new DescriptiveStatistics();
 
                 for (int instanceID : confidenceScoreDifferencesPerInstance.keySet()) {
-                    instanceTempDSMax.addValue(confidenceScoreDifferencesPerInstance.get(instanceID).get(numOfIterationsBack).getMax());
-                    instanceTempDSMin.addValue(confidenceScoreDifferencesPerInstance.get(instanceID).get(numOfIterationsBack).getMin());
-                    instanceTempDSAvg.addValue(confidenceScoreDifferencesPerInstance.get(instanceID).get(numOfIterationsBack).getMean());
-                    instanceTempDSStdev.addValue(confidenceScoreDifferencesPerInstance.get(instanceID).get(numOfIterationsBack).getStandardDeviation());
-                    instanceTempDSMedian.addValue(confidenceScoreDifferencesPerInstance.get(instanceID).get(numOfIterationsBack).getPercentile(50));
+                    try{
+                        instanceTempDSMax.addValue(confidenceScoreDifferencesPerInstance.get(instanceID).get(numOfIterationsBack).getMax());
+                        instanceTempDSMin.addValue(confidenceScoreDifferencesPerInstance.get(instanceID).get(numOfIterationsBack).getMin());
+                        instanceTempDSAvg.addValue(confidenceScoreDifferencesPerInstance.get(instanceID).get(numOfIterationsBack).getMean());
+                        instanceTempDSStdev.addValue(confidenceScoreDifferencesPerInstance.get(instanceID).get(numOfIterationsBack).getStandardDeviation());
+                        instanceTempDSMedian.addValue(confidenceScoreDifferencesPerInstance.get(instanceID).get(numOfIterationsBack).getPercentile(50));
+                    } catch (Exception e){
+                        continue;
+                    }
+
                 }
 
                 AttributeInfo maxAvgPerInstanceAtt = new AttributeInfo(numOfIterationsBack + "instancesAverageOfMaxDelta" + "_" + identifier, Column.columnType.Numeric, instanceTempDSMax.getMean(), -1);
@@ -517,6 +527,7 @@ public class ScoreDistributionBasedAttributes {
 
 
         //region Calculate the Paired T-Test statistics of the current iteration with previous iterations
+        //TO DO: understand what is this structure: iterationsEvaluationInfo -- ASK Gilad
         TTest tTest = new TTest();
         double[][] scoreDistributions = iterationsEvaluationInfo.get(currentIteration);
         double[] currentIterationTargetClassScoreDistributions = new double[scoreDistributions.length];
@@ -531,31 +542,31 @@ public class ScoreDistributionBasedAttributes {
             for (int j=0; j<tempScoreDistributions.length; j++) {
                 tempIterationTargetClassScoreDistributions[j] = tempScoreDistributions[j][targetClassIndex];
             }
-            double TTestStatistic = tTest.pairedT(currentIterationTargetClassScoreDistributions,tempIterationTargetClassScoreDistributions);
-            pairedTTestValueForCurrentAndPreviousIterations.put(i,TTestStatistic);
+            double TTestStatistic = tTest.t(currentIterationTargetClassScoreDistributions,tempIterationTargetClassScoreDistributions);
+            tTestValueForCurrentAndPreviousIterations.put(i,TTestStatistic);
         }
 
         for (int numOfIterationsBack : numOfIterationsBackToAnalyze) {
             if (currentIteration >= numOfIterationsBack) {
-                previousIterationsPairedTTestStatistics.put(numOfIterationsBack, new DescriptiveStatistics());
+                previousIterationsTTestStatistics.put(numOfIterationsBack, new DescriptiveStatistics());
                 for (int i=currentIteration-numOfIterationsBack; i<currentIteration; i++) {
-                    previousIterationsPairedTTestStatistics.get(numOfIterationsBack).addValue(pairedTTestValueForCurrentAndPreviousIterations.get(i));
+                    previousIterationsTTestStatistics.get(numOfIterationsBack).addValue(tTestValueForCurrentAndPreviousIterations.get(i));
                 }
 
                 //now that we obtained the statistics of all the relevant iterations, we can generate the attributes
-                AttributeInfo maxTTestStatisticForScoreDistributionAtt = new AttributeInfo("maxTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, previousIterationsPairedTTestStatistics.get(numOfIterationsBack).getMax(), -1);
+                AttributeInfo maxTTestStatisticForScoreDistributionAtt = new AttributeInfo("maxTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, previousIterationsTTestStatistics.get(numOfIterationsBack).getMax(), -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), maxTTestStatisticForScoreDistributionAtt);
 
-                AttributeInfo minTTestStatisticForScoreDistributionAtt = new AttributeInfo("minTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, previousIterationsPairedTTestStatistics.get(numOfIterationsBack).getMin(), -1);
+                AttributeInfo minTTestStatisticForScoreDistributionAtt = new AttributeInfo("minTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, previousIterationsTTestStatistics.get(numOfIterationsBack).getMin(), -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), minTTestStatisticForScoreDistributionAtt);
 
-                AttributeInfo avgTTestStatisticForScoreDistributionAtt = new AttributeInfo("maxTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, previousIterationsPairedTTestStatistics.get(numOfIterationsBack).getMean(), -1);
+                AttributeInfo avgTTestStatisticForScoreDistributionAtt = new AttributeInfo("maxTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, previousIterationsTTestStatistics.get(numOfIterationsBack).getMean(), -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), avgTTestStatisticForScoreDistributionAtt);
 
-                AttributeInfo stdevTTestStatisticForScoreDistributionAtt = new AttributeInfo("stdevTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, previousIterationsPairedTTestStatistics.get(numOfIterationsBack).getStandardDeviation(), -1);
+                AttributeInfo stdevTTestStatisticForScoreDistributionAtt = new AttributeInfo("stdevTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, previousIterationsTTestStatistics.get(numOfIterationsBack).getStandardDeviation(), -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), stdevTTestStatisticForScoreDistributionAtt);
 
-                AttributeInfo medianTTestStatisticForScoreDistributionAtt = new AttributeInfo("medianTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, previousIterationsPairedTTestStatistics.get(numOfIterationsBack).getPercentile(50), -1);
+                AttributeInfo medianTTestStatisticForScoreDistributionAtt = new AttributeInfo("medianTTestStatisticForScoreDistribution_" + numOfIterationsBack + "IterationsBack"+ "_" + identifier, Column.columnType.Numeric, previousIterationsTTestStatistics.get(numOfIterationsBack).getPercentile(50), -1);
                 iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), medianTTestStatisticForScoreDistributionAtt);
 
             }
@@ -597,9 +608,11 @@ public class ScoreDistributionBasedAttributes {
                 labelChangePercentageByIterationAndThreshold.put(numOfIterationsBack, new HashMap<>());
                 for (double threshold : confidenceScoreThresholds) {
                     double counter = 0;
-                    for (int i=0; i<tempIterationTargetClassScoreDistributions.length; i++) {
-                        if ((currentIterationTargetClassScoreDistributions[i] < threshold && tempIterationTargetClassScoreDistributions[i] >= threshold) ||
-                                (currentIterationTargetClassScoreDistributions[i] >= threshold && tempIterationTargetClassScoreDistributions[i] < threshold)) {
+                    for (int i=0; i<currentIterationTargetClassScoreDistributions.length; i++) {
+                        if ((currentIterationTargetClassScoreDistributions[i] < threshold &&
+                                tempIterationTargetClassScoreDistributions[i] >= threshold) ||
+                                (currentIterationTargetClassScoreDistributions[i] >= threshold &&
+                                        tempIterationTargetClassScoreDistributions[i] < threshold)) {
                             counter++;
                         }
                     }
