@@ -18,6 +18,7 @@ import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -79,7 +80,11 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
 
         //this object save the results of the runs of the unified datasets (original labeled + labeled during the co-training process).
         EvaluationPerIteraion unifiedDatasetEvaulationResults = new EvaluationPerIteraion();
-
+        //write meta data information in groups and not one by one
+        HashMap<TreeMap<Integer,AttributeInfo>, int[]> writeInstanceMetaDataInGroup = new HashMap<>();
+        HashMap<TreeMap<Integer,AttributeInfo>, int[]> writeBatchMetaDataInGroup = new HashMap<>();
+        HashMap<ArrayList<Integer>,int[]> writeInsertBatchInGroup = new HashMap<>();
+        int writeCounterBin = 1;
 
         for (int i=0; i<num_of_iterations; i++) {
             /*for each set of features, train a classifier on the labeled training set and: a) apply it on the
@@ -88,7 +93,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
 
 
             //step 1 - train the classifiers on the labeled training set and run on the unlabeled training set
-            System.out.println("labaled: " + labeledTrainingSetIndices.size() + ";  unlabeled: " + unlabeledTrainingSetIndices.size() );
+            System.out.println("start iteration with: labaled: " + labeledTrainingSetIndices.size() + ";  unlabeled: " + unlabeledTrainingSetIndices.size() );
 
             for (int partitionIndex : feature_sets.keySet()) {
                 EvaluationInfo evaluationResults = runClassifier(properties.getProperty("classifier"),
@@ -125,15 +130,19 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
             ArrayList<ArrayList<Integer>> batchesInstancesList = new ArrayList<>();
             List<TreeMap<Integer,AttributeInfo>> instanceAttributeCurrentIterationList = new ArrayList<>();
 
+
             //pick random 1000 batches of 8 instances and get meta features
             //TO-DO: extract random selection to different class in order to control the changes of other selection methods
-            Random rnd = new Random(Integer.parseInt(properties.getProperty("randomSeed")));
+            Random rnd = new Random((i + Integer.parseInt(properties.getProperty("randomSeed"))));
             for (int batchIndex = 0; batchIndex < Integer.parseInt(properties.getProperty("numOfBatchedPerIteration")); batchIndex++) {
                 ArrayList<Integer> instancesBatchOrginalPos = new ArrayList<>();
                 ArrayList<Integer> instancesBatchSelectedPos = new ArrayList<>();
 
                 HashMap<Integer, Integer> assignedLabelsOriginalIndex = new HashMap<>();
                 HashMap<Integer, Integer> assignedLabelsSelectedIndex = new HashMap<>();
+                HashMap<TreeMap<Integer,AttributeInfo>, int[]> writeInstanceMetaDataInGroupTemp = new HashMap<>();
+                int class0counter = 0;
+                int class1counter = 0;
                 for (int partitionIndex : evaluationResultsPerSetAndInteration.keySet()){
                     //we need 8 distinct instances
                     for (int sampleIndex = 0; sampleIndex < Integer.parseInt(properties.getProperty("instancesPerBatch"))/2; sampleIndex++) {
@@ -147,45 +156,64 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                         instancesBatchOrginalPos.add(instancePos);
                         instancesBatchSelectedPos.add(relativeIndex);
 
-                        //ASK GILAD: getScoreDistributions has scores without the instance original position - how to take it?
-                        //until fix: arrayIndex == instancePos
                         //calculate instance class
+
                         int assignedClass;
                         double scoreClass0 = evaluationResultsPerSetAndInteration.get(partitionIndex).getLatestEvaluationInfo().getScoreDistributions()[relativeIndex][0];
                         double scoreClass1 = evaluationResultsPerSetAndInteration.get(partitionIndex).getLatestEvaluationInfo().getScoreDistributions()[relativeIndex][1];
                         if (scoreClass0 > scoreClass1){
                             assignedClass = 0;
+                            class0counter++;
                         }
                         else{
                             assignedClass = 1;
+                            class1counter++;
                         }
                         assignedLabelsOriginalIndex.put(instancePos, assignedClass);
                         assignedLabelsSelectedIndex.put(relativeIndex, assignedClass);
                         //get instance meta features
-//                        instanceAttributeCurrentIteration = new TreeMap<>();
+
                         TreeMap<Integer,AttributeInfo> instanceAttributeCurrentIteration = instanceAttributes.getInstanceAssignmentMetaFeatures(
                                 unlabeledToMetaFeatures,dataset,
                                 i, evaluationResultsPerSetAndInterationTree,
-                                unifiedDatasetEvaulationResults, targetClassIndex/*dataset.getTargetColumnIndex()*/,
+                                unifiedDatasetEvaulationResults, targetClassIndex,
                                 relativeIndex,instancePos, assignedClass, properties);
                         instanceAttributeCurrentIterationList.add(instanceAttributeCurrentIteration);
-                        writeResultsToInstanceMetaFeatures(instanceAttributeCurrentIteration, i, exp_id, iteration, instancePos, batchIndex, properties, dataset);
-
+                        int[] instanceInfoToWrite = new int[5];
+                        instanceInfoToWrite[0]=exp_id;
+                        instanceInfoToWrite[1]=iteration;
+                        instanceInfoToWrite[2]=i;
+                        instanceInfoToWrite[3]=instancePos;
+                        instanceInfoToWrite[4]=batchIndex;
+                        writeInstanceMetaDataInGroupTemp.put(instanceAttributeCurrentIteration, instanceInfoToWrite);
+                        //writeResultsToInstanceMetaFeatures(instanceAttributeCurrentIteration, exp_id, iteration, i, instancePos, batchIndex, properties, dataset);
                     }
                 }
-                batchesInstancesList.add(instancesBatchOrginalPos);
-                TreeMap<Integer,AttributeInfo> batchAttributeCurrentIterationList = new TreeMap<>();
-                batchAttributeCurrentIterationList = instancesBatchAttributes.getInstancesBatchAssignmentMetaFeatures(
-                        unlabeledToMetaFeatures,labeledToMetaFeatures,
-                        i, evaluationResultsPerSetAndInterationTree,
-                        unifiedDatasetEvaulationResults, targetClassIndex/*dataset.getTargetColumnIndex()*/,
-                        instancesBatchSelectedPos, assignedLabelsSelectedIndex, properties);
-                writeResultsToBatchesMetaFeatures(batchAttributeCurrentIterationList, i, exp_id, batchIndex, properties, dataset);
+                if (class0counter > Integer.parseInt(properties.getProperty("minNumberOfInstancesPerClassInAbatch"))
+                        && class1counter > Integer.parseInt(properties.getProperty("minNumberOfInstancesPerClassInAbatch"))){
+                    writeInstanceMetaDataInGroup.putAll(writeInstanceMetaDataInGroupTemp);
+                    batchesInstancesList.add(instancesBatchOrginalPos);
+                    TreeMap<Integer,AttributeInfo> batchAttributeCurrentIterationList = instancesBatchAttributes.getInstancesBatchAssignmentMetaFeatures(
+                            unlabeledToMetaFeatures,labeledToMetaFeatures,
+                            i, evaluationResultsPerSetAndInterationTree,
+                            unifiedDatasetEvaulationResults, targetClassIndex/*dataset.getTargetColumnIndex()*/,
+                            instancesBatchSelectedPos, assignedLabelsSelectedIndex, properties);
 
-                //TO DO: run the classifier with this batch: on cloned dataset and re-create the run-experiment method (Batches_Score)
-                runClassifierOnSampledBatch(exp_id, iteration, i, batchIndex, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions,assignedLabelsOriginalIndex, labeledTrainingSetIndices, properties);
-                System.out.println("batch: " + batchIndex + ", iteration: " + i);
+                    int[] batchInfoToWrite = new int[3];
+                    batchInfoToWrite[0]=exp_id;
+                    batchInfoToWrite[1]=i;
+                    batchInfoToWrite[2]=batchIndex;
+                    writeBatchMetaDataInGroup.put(batchAttributeCurrentIterationList, batchInfoToWrite);
+                    //writeResultsToBatchesMetaFeatures(batchAttributeCurrentIterationList, exp_id, i, batchIndex, properties, dataset);
+
+                    //run the classifier with this batch: on cloned dataset and re-create the run-experiment method (Batches_Score)
+                    runClassifierOnSampledBatch(exp_id, iteration, i, batchIndex, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions,assignedLabelsOriginalIndex, labeledTrainingSetIndices, properties);
+                    System.out.println("done sample random batches for batch: " + batchIndex + ", iteration: " + i);
+                }
+                writeInstanceMetaDataInGroupTemp.clear();
             }
+
+
 
             //step 2 - get the indices of the items we want to label (separately for each class)
             HashMap<Integer,HashMap<Integer,Double>> instancesToAddPerClass = new HashMap<>();
@@ -207,18 +235,46 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                         unifiedDatasetEvaulationResults, targetClassIndex/*dataset.getTargetColumnIndex()*/,
                         instance,originalInstancePos, assignedClass, properties);
 //                instanceAttributeCurrentIterationList.add(instanceAttributeCurrentIteration);
-                writeResultsToInstanceMetaFeatures(instanceAttributeCurrentIteration, i, exp_id, iteration, originalInstancePos, -1, properties, dataset);
+                int[] instanceInfoToWrite = new int[5];
+                instanceInfoToWrite[0]=exp_id;
+                instanceInfoToWrite[1]=iteration;
+                instanceInfoToWrite[2]=i;
+                instanceInfoToWrite[3]=originalInstancePos;
+                instanceInfoToWrite[4]= -1;
+                writeInstanceMetaDataInGroup.put(instanceAttributeCurrentIteration, instanceInfoToWrite);
+//                writeResultsToInstanceMetaFeatures(instanceAttributeCurrentIteration, exp_id, iteration, i, originalInstancePos, -1, properties, dataset);
             }
 
-            TreeMap<Integer,AttributeInfo> selectedBatchAttributeCurrentIterationList = new TreeMap<>();
-            selectedBatchAttributeCurrentIterationList = instancesBatchAttributes.getInstancesBatchAssignmentMetaFeatures(
+            TreeMap<Integer,AttributeInfo>  selectedBatchAttributeCurrentIterationList = instancesBatchAttributes.getInstancesBatchAssignmentMetaFeatures(
                     unlabeledToMetaFeatures,labeledToMetaFeatures,
                     i, evaluationResultsPerSetAndInterationTree,
                     unifiedDatasetEvaulationResults, targetClassIndex/*dataset.getTargetColumnIndex()*/,
                     new ArrayList<>(selectedInstancesRelativeIndexes.keySet()), selectedInstancesRelativeIndexes, properties);
-            writeResultsToBatchesMetaFeatures(selectedBatchAttributeCurrentIterationList, i, exp_id, -1 + iteration*(-1), properties, dataset);
-            //TO DO: insert the select instances of batch to the DB
-             writeToInstancesInBatchTbl(iteration*(-1), exp_id, i, indicesOfAddedInstances, properties);
+            int[] batchInfoToWrite = new int[3];
+            batchInfoToWrite[0]=exp_id;
+            batchInfoToWrite[1]=i;
+            batchInfoToWrite[2]= -1 + iteration*(-1);
+            writeBatchMetaDataInGroup.put(selectedBatchAttributeCurrentIterationList, batchInfoToWrite);
+            //writeResultsToBatchesMetaFeatures(selectedBatchAttributeCurrentIterationList, exp_id, i,  -1 + iteration*(-1), properties, dataset);
+
+            int[] insertBatchInfoToWrite = new int[3];
+            insertBatchInfoToWrite[0]=iteration*(-1);
+            insertBatchInfoToWrite[1]=exp_id;
+            insertBatchInfoToWrite[2]=iteration;
+            writeInsertBatchInGroup.put(indicesOfAddedInstances, insertBatchInfoToWrite);
+            //writeToInstancesInBatchTbl(iteration*(-1), exp_id, iteration, indicesOfAddedInstances, properties);
+
+
+            //write meta-data in groups of 20% of iteration
+            if (i == (writeCounterBin*(num_of_iterations/5))-1){
+                writeResultsToInstanceMetaFeaturesGroup(writeInstanceMetaDataInGroup, properties, dataset);
+                writeResultsToBatchMetaFeaturesGroup(writeBatchMetaDataInGroup, properties, dataset);
+                writeToInsertInstancesToBatchGroup(writeInsertBatchInGroup, properties);
+                writeInstanceMetaDataInGroup.clear();
+                writeBatchMetaDataInGroup.clear();
+                writeInsertBatchInGroup.clear();
+                writeCounterBin++;
+            }
 
             //step 3 - set the class labels of the newly labeled instances to what we THINK they are
             for (int classIndex : instancesToAddPerClass.keySet()) {
@@ -239,15 +295,18 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
             //step 5 - train the models using the current instances and apply them to the test set
             RunExperimentsOnTestSet(exp_id, iteration, i, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions, labeledTrainingSetIndices, properties);
 
+            System.out.println("done insert batch and run the classifier for iteration: " + i);
 
 
-            //step 6 - generate the meta features - not relevant!!
-//            generateMetaFeatures(dataset, labeledTrainingSetIndices, unlabeledTrainingSetIndices, evaluationResultsPerSetAndInteration, unifiedDatasetEvaulationResults, i, properties);
-
-            //HashMap<Integer,AttributeInfo> scoreDistributionMetaFeatures = scoreDistributionBasedAttributes.getScoreDistributionBasedAttributes()
+            /* old version call
+            step 6 - generate the meta features - not relevant!!
+            generateMetaFeatures(dataset, labeledTrainingSetIndices, unlabeledTrainingSetIndices, evaluationResultsPerSetAndInteration, unifiedDatasetEvaulationResults, i, properties);
+            HashMap<Integer,AttributeInfo> scoreDistributionMetaFeatures = scoreDistributionBasedAttributes.getScoreDistributionBasedAttribute()            */
         }
         return null;
     }
+
+
 
 
     @Override
@@ -400,13 +459,48 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
         conn.close();
     }
 
+    private void writeResultsToInstanceMetaFeaturesGroup(HashMap<TreeMap<Integer, AttributeInfo>, int[]> writeInstanceMetaDataInGroup, Properties properties, Dataset dataset) throws Exception{
+        String myDriver = properties.getProperty("JDBC_DRIVER");
+        String myUrl = properties.getProperty("DatabaseUrl");
+        Class.forName(myDriver);
+        Connection conn = DriverManager.getConnection(myUrl, properties.getProperty("DBUser"), properties.getProperty("DBPassword"));
+
+        for (Map.Entry<TreeMap<Integer, AttributeInfo>, int[]> outerEntry : writeInstanceMetaDataInGroup.entrySet()){
+            String sql = "insert into tbl_Instances_Meta_Data (att_id, exp_id, exp_iteration, inner_iteration_id, instance_pos,batch_id, meta_feature_name, meta_feature_value) values (?, ?, ?, ?, ?, ?, ?, ?)";
+            TreeMap<Integer,AttributeInfo> instanceMetaData= outerEntry.getKey();
+            int[] instanceInfo = outerEntry.getValue();
+
+            int att_id = 0;
+            for(Map.Entry<Integer,AttributeInfo> entry : instanceMetaData.entrySet()){
+                String metaFeatureName = entry.getValue().getAttributeName();
+                String metaFeatureValue = entry.getValue().getValue().toString();
+                //insert to table
+                PreparedStatement preparedStmt = conn.prepareStatement(sql);
+                preparedStmt.setInt (1, att_id);
+                preparedStmt.setInt (2, instanceInfo[0]);
+                preparedStmt.setInt (3, instanceInfo[1]);
+                preparedStmt.setInt(4, instanceInfo[2]);
+                preparedStmt.setInt(5, instanceInfo[3]);
+                preparedStmt.setInt (6, instanceInfo[4]);
+                preparedStmt.setString   (7, metaFeatureName);
+                preparedStmt.setString   (8, metaFeatureValue);
+
+                preparedStmt.execute();
+                preparedStmt.close();
+
+                att_id++;
+            }
+        }
+        conn.close();
+    }
+
     private void writeResultsToInstanceMetaFeatures(TreeMap<Integer,AttributeInfo> instanceMetaData, int expID, int expIteration,
                                                     int innerIteration, int instancePos, int batchId, Properties properties, Dataset dataset) throws Exception{
         String myDriver = properties.getProperty("JDBC_DRIVER");
         String myUrl = properties.getProperty("DatabaseUrl");
         Class.forName(myDriver);
 
-        String sql = "insert into tbl_Instances_Meta_Data (att_id, batch_id, exp_id, exp_iteration, inner_iteration_id, instance_pos, meta_feature_name, meta_feature_value) values (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into tbl_Instances_Meta_Data (att_id, exp_id, exp_iteration, inner_iteration_id, instance_pos,batch_id, meta_feature_name, meta_feature_value) values (?, ?, ?, ?, ?, ?, ?, ?)";
 
         Connection conn = DriverManager.getConnection(myUrl, properties.getProperty("DBUser"), properties.getProperty("DBPassword"));
 
@@ -434,13 +528,45 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
         conn.close();
     }
 
-    private void writeResultsToBatchesMetaFeatures(TreeMap<Integer,AttributeInfo> batchMetaData, int expID, int expIteration,
+    private void writeResultsToBatchMetaFeaturesGroup(HashMap<TreeMap<Integer, AttributeInfo>, int[]> writeBatchMetaDataInGroup, Properties properties, Dataset dataset) throws Exception{
+        String myDriver = properties.getProperty("JDBC_DRIVER");
+        String myUrl = properties.getProperty("DatabaseUrl");
+        Class.forName(myDriver);
+        Connection conn = DriverManager.getConnection(myUrl, properties.getProperty("DBUser"), properties.getProperty("DBPassword"));
+
+        for (Map.Entry<TreeMap<Integer, AttributeInfo>, int[]> outerEntry : writeBatchMetaDataInGroup.entrySet()){
+            String sql = "insert into tbl_Batches_Meta_Data (att_id, exp_id, exp_iteration, batch_id,meta_feature_name, meta_feature_value) values (?, ?, ?, ?, ?, ?)";
+            TreeMap<Integer,AttributeInfo> batchMetaData= outerEntry.getKey();
+            int[] batchInfo = outerEntry.getValue();
+            int att_id = 0;
+            for(Map.Entry<Integer,AttributeInfo> entry : batchMetaData.entrySet()){
+                String metaFeatureName = entry.getValue().getAttributeName();
+                String metaFeatureValue = entry.getValue().getValue().toString();
+                //insert to table
+                PreparedStatement preparedStmt = conn.prepareStatement(sql);
+                preparedStmt.setInt(1, att_id);
+                preparedStmt.setInt(2, batchInfo[0]);
+                preparedStmt.setInt(3, batchInfo[1]);
+                preparedStmt.setInt(4, batchInfo[2]);
+                preparedStmt.setString(5, metaFeatureName);
+                preparedStmt.setString(6, metaFeatureValue);
+
+                preparedStmt.execute();
+                preparedStmt.close();
+
+                att_id++;
+            }
+        }
+        conn.close();
+    }
+
+    private void writeResultsToBatchesMetaFeatures(TreeMap<Integer,AttributeInfo> batchMetaData, int expID, int innerIteration,
                                                    int batchID, Properties properties, Dataset dataset) throws Exception{
         String myDriver = properties.getProperty("JDBC_DRIVER");
         String myUrl = properties.getProperty("DatabaseUrl");
         Class.forName(myDriver);
 
-        String sql = "insert into tbl_Batches_Meta_Data (att_id, batch_id, exp_id, exp_iteration, meta_feature_name, meta_feature_value) values (?, ?, ?, ?, ?, ?)";
+        String sql = "insert into tbl_Batches_Meta_Data (att_id, exp_id, exp_iteration, batch_id,meta_feature_name, meta_feature_value) values (?, ?, ?, ?, ?, ?)";
 
         Connection conn = DriverManager.getConnection(myUrl, properties.getProperty("DBUser"), properties.getProperty("DBPassword"));
 
@@ -451,17 +577,42 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
 
             //insert to table
             PreparedStatement preparedStmt = conn.prepareStatement(sql);
-            preparedStmt.setInt (1, att_id);
-            preparedStmt.setInt (2, batchID);
-            preparedStmt.setInt (3, expID);
-            preparedStmt.setInt(4, expIteration);
-            preparedStmt.setString   (5, metaFeatureName);
-            preparedStmt.setString   (6, metaFeatureValue);
+            preparedStmt.setInt(1, att_id);
+            preparedStmt.setInt(2, expID);
+            preparedStmt.setInt(3, innerIteration);
+            preparedStmt.setInt(4, batchID);
+            preparedStmt.setString(5, metaFeatureName);
+            preparedStmt.setString(6, metaFeatureValue);
 
             preparedStmt.execute();
             preparedStmt.close();
 
             att_id++;
+        }
+        conn.close();
+    }
+
+    private void writeToInsertInstancesToBatchGroup(HashMap<ArrayList<Integer>, int[]> writeInsertBatchInGroup, Properties properties) throws Exception{
+        String myDriver = properties.getProperty("JDBC_DRIVER");
+        String myUrl = properties.getProperty("DatabaseUrl");
+        Class.forName(myDriver);
+        Connection conn = DriverManager.getConnection(myUrl, properties.getProperty("DBUser"), properties.getProperty("DBPassword"));
+        for (Map.Entry<ArrayList<Integer>, int[]> outerEntry : writeInsertBatchInGroup.entrySet()){
+            String sql = "insert into tbl_Instance_In_Batch(batch_id, exp_id, exp_iteration, instance_id, instance_pos) values (?, ?, ?, ?, ?)";
+            ArrayList<Integer> instancesBatchPos = outerEntry.getKey();
+            int[] instanceToBatch = outerEntry.getValue();
+            for(Integer instancePosInBatch : instancesBatchPos){
+                //insert to table
+                PreparedStatement preparedStmt = conn.prepareStatement(sql);
+                preparedStmt.setInt (1, instanceToBatch[0]);
+                preparedStmt.setInt (2, instanceToBatch[1]);
+                preparedStmt.setInt (3, instanceToBatch[2]);
+                preparedStmt.setInt (4, instancePosInBatch);
+                preparedStmt.setInt (5, instancePosInBatch);
+
+                preparedStmt.execute();
+                preparedStmt.close();
+            }
         }
         conn.close();
     }
@@ -497,17 +648,19 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
 
         //clone the original dataset
         Dataset clonedDataset = dataset.replicateDataset();
-
-        //run classifier before adding
-        AUC aucBeforeAddBatch = new AUC();
-        int[] testFoldLabelsBeforeAdding = clonedDataset.getTargetClassLabelsByIndex(testFold.getIndices());
-        //Test the entire newly-labeled training set on the test set
-        EvaluationInfo evaluationResultsBeforeAdding = runClassifier(properties.getProperty("classifier"),
-                clonedDataset.generateSet(FoldsInfo.foldType.Train,labeledTrainingSetIndices),
-                clonedDataset.generateSet(FoldsInfo.foldType.Test,testFold.getIndices()), properties);
-        double measureAucBeforeAddBatch = aucBeforeAddBatch.measure
-                (testFoldLabelsBeforeAdding, getSingleClassValueConfidenceScore(evaluationResultsBeforeAdding.getScoreDistributions(),0));
-        writeToBatchScoreTbl(batch_id,expID, innerIteration, "auc_before_add_batch", measureAucBeforeAddBatch, testFoldLabelsBeforeAdding.length, properties);
+        List<Integer> clonedlabeLedTrainingSetIndices = new ArrayList<>(labeledTrainingSetIndices);
+        //run classifier before adding - only for the first batch in the iteration
+        if (batch_id == 0){
+            AUC aucBeforeAddBatch = new AUC();
+            int[] testFoldLabelsBeforeAdding = clonedDataset.getTargetClassLabelsByIndex(testFold.getIndices());
+            //Test the entire newly-labeled training set on the test set
+            EvaluationInfo evaluationResultsBeforeAdding = runClassifier(properties.getProperty("classifier"),
+                    clonedDataset.generateSet(FoldsInfo.foldType.Train,clonedlabeLedTrainingSetIndices),
+                    clonedDataset.generateSet(FoldsInfo.foldType.Test,testFold.getIndices()), properties);
+            double measureAucBeforeAddBatch = aucBeforeAddBatch.measure
+                    (testFoldLabelsBeforeAdding, getSingleClassValueConfidenceScore(evaluationResultsBeforeAdding.getScoreDistributions(),0));
+            writeToBatchScoreTbl(batch_id,expID, innerIteration, "auc_before_add_batch", measureAucBeforeAddBatch, testFoldLabelsBeforeAdding.length, properties);
+        }
 
         //add batch instances to the cloned dataset
         ArrayList<Integer> instancesClass0 = new ArrayList<>();
@@ -521,6 +674,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
             else{
                 instancesClass1.add(instancePos);
             }
+            clonedlabeLedTrainingSetIndices.add(instancePos);
         }
         clonedDataset.updateInstanceTargetClassValue(instancesClass0, 0);
         clonedDataset.updateInstanceTargetClassValue(instancesClass1, 1);
@@ -530,7 +684,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
         int[] testFoldLabelsAfterAdding = clonedDataset.getTargetClassLabelsByIndex(testFold.getIndices());
         //Test the entire newly-labeled training set on the test set
         EvaluationInfo evaluationResultsAfterAdding = runClassifier(properties.getProperty("classifier"),
-                clonedDataset.generateSet(FoldsInfo.foldType.Train,labeledTrainingSetIndices),
+                clonedDataset.generateSet(FoldsInfo.foldType.Train,clonedlabeLedTrainingSetIndices),
                 clonedDataset.generateSet(FoldsInfo.foldType.Test,testFold.getIndices()), properties);
         double measureAucAfterAddBatch = aucAfterAddBatch.measure
                 (testFoldLabelsAfterAdding, getSingleClassValueConfidenceScore(evaluationResultsAfterAdding.getScoreDistributions(),0));

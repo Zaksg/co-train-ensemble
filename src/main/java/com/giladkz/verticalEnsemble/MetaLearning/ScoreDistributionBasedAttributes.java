@@ -147,14 +147,14 @@ public class ScoreDistributionBasedAttributes {
 
         //now the averaging and multiplication
         TreeMap<Integer, AttributeInfo> averagingIterationBasedAttributes =
-                calculateScoreDistributionStatisticsOverMultipleIterations(currentIterationIndex,
+                calculateScoreDistributionStatisticsOverMultipleIterations(1,
                         averageingScoreDistributionsPerIteration,targetClassIndex, "averaging", properties);
         for (int pos : averagingIterationBasedAttributes.keySet()) {
             iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), averagingIterationBasedAttributes.get(pos));
         }
 
         TreeMap<Integer, AttributeInfo> multiplicationIterationBasedAttributes =
-                calculateScoreDistributionStatisticsOverMultipleIterations(currentIterationIndex,
+                calculateScoreDistributionStatisticsOverMultipleIterations(1,
                         multiplicationScoreDistributionsPerIteration,targetClassIndex,"multiplication", properties);
         for (int pos : multiplicationIterationBasedAttributes.keySet()) {
             iterationsBasedStatisticsAttributes.put(iterationsBasedStatisticsAttributes.size(), multiplicationIterationBasedAttributes.get(pos));
@@ -835,7 +835,7 @@ public class ScoreDistributionBasedAttributes {
                             belowThresholdCounter++;
                         }
                     }
-                    if (aboveThresholdCounter > 0){
+                    if (aboveThresholdCounter > 1){
                         TTest tTest = new TTest();
                         double tTestStatistic = tTest.t(aboveThresholdValues,belowThresholdValues);
                         allFeatureCorrelationStatsByThreshold.get(threshold).addValue(tTestStatistic);
