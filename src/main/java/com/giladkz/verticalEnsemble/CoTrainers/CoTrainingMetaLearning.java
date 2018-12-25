@@ -84,6 +84,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
         HashMap<TreeMap<Integer,AttributeInfo>, int[]> writeInstanceMetaDataInGroup = new HashMap<>();
         HashMap<TreeMap<Integer,AttributeInfo>, int[]> writeBatchMetaDataInGroup = new HashMap<>();
         HashMap<ArrayList<Integer>,int[]> writeInsertBatchInGroup = new HashMap<>();
+        HashMap<int[], Double> writeSampleBatchScoreInGroup = new HashMap<>();
         int writeCounterBin = 1;
 
         for (int i=0; i<num_of_iterations; i++) {
@@ -207,7 +208,8 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                     //writeResultsToBatchesMetaFeatures(batchAttributeCurrentIterationList, exp_id, i, batchIndex, properties, dataset);
 
                     //run the classifier with this batch: on cloned dataset and re-create the run-experiment method (Batches_Score)
-                    runClassifierOnSampledBatch(exp_id, iteration, i, batchIndex, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions,assignedLabelsOriginalIndex, labeledTrainingSetIndices, properties);
+                    writeSampleBatchScoreInGroup.putAll(runClassifierOnSampledBatch(exp_id, iteration, i, batchIndex, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions,assignedLabelsOriginalIndex, labeledTrainingSetIndices, properties));
+//                    runClassifierOnSampledBatch(exp_id, iteration, i, batchIndex, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions,assignedLabelsOriginalIndex, labeledTrainingSetIndices, properties);
                     System.out.println("done sample random batches for batch: " + batchIndex + ", iteration: " + i);
                 }
                 writeInstanceMetaDataInGroupTemp.clear();
@@ -270,9 +272,11 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                 writeResultsToInstanceMetaFeaturesGroup(writeInstanceMetaDataInGroup, properties, dataset);
                 writeResultsToBatchMetaFeaturesGroup(writeBatchMetaDataInGroup, properties, dataset);
                 writeToInsertInstancesToBatchGroup(writeInsertBatchInGroup, properties);
+                writeToBatchScoreTblGroup(writeSampleBatchScoreInGroup, properties);
                 writeInstanceMetaDataInGroup.clear();
                 writeBatchMetaDataInGroup.clear();
                 writeInsertBatchInGroup.clear();
+                writeSampleBatchScoreInGroup.clear();
                 writeCounterBin++;
             }
 
@@ -642,10 +646,11 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
         conn.close();
     }
 
-    private void runClassifierOnSampledBatch(int expID, int expIteration, int innerIteration, int batch_id
+    private HashMap<int[], Double> runClassifierOnSampledBatch(int expID, int expIteration, int innerIteration, int batch_id
             , Dataset dataset, Fold testFold, Fold trainFold, HashMap<Integer,Dataset> datasetPartitions,
                                              HashMap<Integer, Integer> batchInstancesToAdd, List<Integer> labeledTrainingSetIndices, Properties properties) throws Exception {
 
+        HashMap<int[], Double> result = new HashMap<>();
         //clone the original dataset
         Dataset clonedDataset = dataset.replicateDataset();
         List<Integer> clonedlabeLedTrainingSetIndices = new ArrayList<>(labeledTrainingSetIndices);
@@ -659,7 +664,14 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                     clonedDataset.generateSet(FoldsInfo.foldType.Test,testFold.getIndices()), properties);
             double measureAucBeforeAddBatch = aucBeforeAddBatch.measure
                     (testFoldLabelsBeforeAdding, getSingleClassValueConfidenceScore(evaluationResultsBeforeAdding.getScoreDistributions(),0));
-            writeToBatchScoreTbl(batch_id,expID, innerIteration, "auc_before_add_batch", measureAucBeforeAddBatch, testFoldLabelsBeforeAdding.length, properties);
+            int[] infoListBefore = new int[5];
+            infoListBefore[0] = batch_id;
+            infoListBefore[1] = expID;
+            infoListBefore[2] = innerIteration;
+            infoListBefore[3] = testFoldLabelsBeforeAdding.length;
+            infoListBefore[4] = -1; //-1="auc_before_add_batch", +1="auc_after_add_batch"
+            result.put(infoListBefore, measureAucBeforeAddBatch);
+//            writeToBatchScoreTbl(batch_id,expID, innerIteration, "auc_before_add_batch", measureAucBeforeAddBatch, testFoldLabelsBeforeAdding.length, properties);
         }
 
         //add batch instances to the cloned dataset
@@ -688,10 +700,52 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                 clonedDataset.generateSet(FoldsInfo.foldType.Test,testFold.getIndices()), properties);
         double measureAucAfterAddBatch = aucAfterAddBatch.measure
                 (testFoldLabelsAfterAdding, getSingleClassValueConfidenceScore(evaluationResultsAfterAdding.getScoreDistributions(),0));
-
-        writeToBatchScoreTbl(batch_id, expID, innerIteration, "auc_after_add_batch", measureAucAfterAddBatch, testFoldLabelsAfterAdding.length, properties);
+        int[] infoListAfter = new int[5];
+        infoListAfter[0] = batch_id;
+        infoListAfter[1] = expID;
+        infoListAfter[2] = innerIteration;
+        infoListAfter[3] = testFoldLabelsAfterAdding.length;
+        infoListAfter[4] = 1; //-1="auc_before_add_batch", +1="auc_after_add_batch"
+        result.put(infoListAfter, measureAucAfterAddBatch);
+//        writeToBatchScoreTbl(batch_id, expID, innerIteration, "auc_after_add_batch", measureAucAfterAddBatch, testFoldLabelsAfterAdding.length, properties);
+        return result;
     }
 
+    private void writeToBatchScoreTblGroup(HashMap<int[], Double> writeSampleBatchScoreInGroup, Properties properties) throws Exception{
+        String myDriver = properties.getProperty("JDBC_DRIVER");
+        String myUrl = properties.getProperty("DatabaseUrl");
+        Class.forName(myDriver);
+        Connection conn = DriverManager.getConnection(myUrl, properties.getProperty("DBUser"), properties.getProperty("DBPassword"));
+        for (Map.Entry<int[], Double> outerEntry : writeSampleBatchScoreInGroup.entrySet()){
+            String sql = "insert into tbl_Batchs_Score(att_id, batch_id, exp_id, exp_iteration, score_type, score_value, test_set_size) values (?, ?, ?, ?, ?, ?, ?)";
+            Double auc = outerEntry.getValue();
+            int[] info = outerEntry.getKey();
+            int att_id=0;
+            //insert to table
+            String score_type;
+            if (info[4] < 0){
+                score_type = "auc_before_add_batch";
+            }
+            else{
+                score_type = "auc_after_add_batch";
+            }
+            PreparedStatement preparedStmt = conn.prepareStatement(sql);
+            preparedStmt.setInt (1, att_id);
+            preparedStmt.setInt (2, info[0]);
+            preparedStmt.setInt (3, info[1]);
+            preparedStmt.setInt (4, info[2]);
+            preparedStmt.setString (5, score_type);
+            preparedStmt.setDouble (6, auc);
+            preparedStmt.setDouble (7, info[3]);
+
+            preparedStmt.execute();
+            preparedStmt.close();
+
+            att_id++;
+
+        }
+        conn.close();
+    }
 
     private void writeToBatchScoreTbl(int batch_id, int exp_id, int exp_iteration,
                                             String score_type, double score, int test_set_size, Properties properties)throws Exception{

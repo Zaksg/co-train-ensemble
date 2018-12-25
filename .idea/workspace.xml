@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5666a6b6-4ebe-4e90-934b-a8a100ec7191" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" afterPath="$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/MetaLearning/ScoreDistributionBasedAttributes.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/config.properties" afterPath="$PROJECT_DIR$/src/main/resources/config.properties" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -33,22 +32,33 @@
       <file leaf-file-name="CoTrainingMetaLearning.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-385">
-              <caret line="398" column="0" lean-forward="false" selection-start-line="398" selection-start-column="0" selection-end-line="398" selection-end-column="0" />
+            <state relative-caret-position="154">
+              <caret line="111" column="53" lean-forward="false" selection-start-line="111" selection-start-column="53" selection-end-line="111" selection-end-column="53" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="docComment;method#generateMetaFeatures#0;class#CoTrainingMetaLearning#0" expanded="false" />
                 <element signature="method#generateMetaFeatures#0;class#CoTrainingMetaLearning#0" expanded="false" />
-                <marker date="1545395293123" expanded="true" signature="26598:26759" ph=" INSERT statement (TBL_SCORE_DISTRIBUTION_META_DATA)" />
-                <marker date="1545395293123" expanded="true" signature="28699:28880" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
-                <marker date="1545395293123" expanded="true" signature="30504:30685" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
-                <marker date="1545395293123" expanded="true" signature="32349:32488" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
-                <marker date="1545395293123" expanded="true" signature="32471:32488" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
-                <marker date="1545395293123" expanded="true" signature="33929:34068" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
-                <marker date="1545395293123" expanded="true" signature="35570:35686" ph=" INSERT statement (TBL_INSTANCE_IN_BATCH)" />
-                <marker date="1545395293123" expanded="true" signature="36827:36943" ph=" INSERT statement (TBL_INSTANCE_IN_BATCHE)" />
-                <marker date="1545395293123" expanded="true" signature="41349:41487" ph=" INSERT statement (TBL_BATCHE)" />
+                <marker date="1545728451902" expanded="true" signature="27099:27260" ph=" INSERT statement (TBL_SCORE_DISTRIBUTION_META_DATA)" />
+                <marker date="1545728451902" expanded="true" signature="29200:29381" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
+                <marker date="1545728451902" expanded="true" signature="31005:31186" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
+                <marker date="1545728451902" expanded="true" signature="32850:32989" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
+                <marker date="1545728451902" expanded="true" signature="32972:32989" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
+                <marker date="1545728451902" expanded="true" signature="34430:34569" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
+                <marker date="1545728451902" expanded="true" signature="36071:36187" ph=" INSERT statement (TBL_INSTANCE_IN_BATCH)" />
+                <marker date="1545728451902" expanded="true" signature="37328:37444" ph=" INSERT statement (TBL_INSTANCE_IN_BATCHE)" />
+                <marker date="1545728451902" expanded="true" signature="42858:42996" ph=" INSERT statement (TBL_BATCHS_SCORE)" />
+                <marker date="1545728451902" expanded="true" signature="44299:44437" ph=" INSERT statement (TBL_BATCHE)" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Files.java" pinned="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files/Java/jdk1.8.0_65/src.zip!/java/nio/file/Files.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="193">
+              <caret line="1164" column="0" lean-forward="false" selection-start-line="1164" selection-start-column="0" selection-end-line="1164" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -56,8 +66,8 @@
       <file leaf-file-name="App.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="69" column="0" lean-forward="false" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+            <state relative-caret-position="355">
+              <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding>
                 <marker date="1544092832358" expanded="true" signature="5239:5299" ph=" SELECT statement (TBL_EXPERIMENTS)" />
                 <marker date="1544092832358" expanded="true" signature="5936:6184" ph=" INSERT statement (TBL_EXPERIMENTS)" />
@@ -87,9 +97,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>testDataset</find>
-      <find>ARFF</find>
-      <find>targetColumnIndex</find>
       <find>avera</find>
       <find>generalPercentageByScoreHistogram</find>
       <find>CoTrainerOriginal</find>
@@ -117,6 +124,9 @@
       <find>maxDeltaScoreDistHisto</find>
       <find>ttest</find>
       <find>paired</find>
+      <find>600</find>
+      <find>1000</find>
+      <find>seed</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -198,10 +208,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
-    <option name="y" value="-9" />
+    <option name="x" value="1874" />
+    <option name="y" value="-18" />
     <option name="width" value="1938" />
-    <option name="height" value="1048" />
+    <option name="height" value="874" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -243,8 +253,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -325,8 +334,9 @@
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
       <pane id="Scope" />
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -595,7 +605,14 @@
       <option name="project" value="LOCAL" />
       <updated>1545122588269</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="fix writing to DB and write in batch">
+      <created>1545401341671</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1545401341671</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TodoView">
@@ -608,39 +625,39 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
+    <frame x="1911" y="-9" width="1938" height="1058" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32692307" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973147" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37330317" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24167562" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32692307" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32692307" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3133484" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32918552" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26957494" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Sequence" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936507" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20676692" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2094522" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32918552" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973147" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37248322" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32918552" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -680,7 +697,8 @@
     <MESSAGE value="fixes until writing to batch score tbl" />
     <MESSAGE value="complete first iteration" />
     <MESSAGE value="catch score distribution exceptions over iteration" />
-    <option name="LAST_COMMIT_MESSAGE" value="catch score distribution exceptions over iteration" />
+    <MESSAGE value="fix writing to DB and write in batch" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix writing to DB and write in batch" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -738,11 +756,18 @@
           <properties />
           <option name="timeStamp" value="304" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="labeledTrainingSetIndices.size() == 164" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java</url>
+          <line>118</line>
+          <properties />
+          <option name="timeStamp" value="327" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="327" />
+      <option name="time" value="329" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -751,11 +776,11 @@
         <watch expression="evaluationResultsPerSetAndInteration" />
         <watch expression="instances_per_class_per_iteration" />
         <watch expression="writeInstanceMetaDataInGroup" />
+        <watch expression="unlabeledTrainingSetIndices" />
       </configuration>
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="db://80165f1b-5c3c-4e28-8b8a-182266e34285/objects/schemas/cotrain/tables/tbl_Meta_Data_Batch_Info" />
     <entry file="db://80165f1b-5c3c-4e28-8b8a-182266e34285/objects/schemas/cotrain/tables/tbl_Co_Training_Added_Samples" />
     <entry file="db://80165f1b-5c3c-4e28-8b8a-182266e34285/objects/schemas/cotrain/tables/tbl_Test_Set_Evaluation_Results" />
     <entry file="jar://$PROJECT_DIR$/.idea/libraries/weka.jar!/weka/classifiers/meta/Bagging.class">
@@ -1092,10 +1117,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_65/src.zip!/java/nio/file/Files.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="1164" column="0" lean-forward="false" selection-start-line="1164" selection-start-column="0" selection-end-line="1164" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="69" column="0" lean-forward="false" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+        <state relative-caret-position="355">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
           <folding>
             <marker date="1544092832358" expanded="true" signature="5239:5299" ph=" SELECT statement (TBL_EXPERIMENTS)" />
             <marker date="1544092832358" expanded="true" signature="5936:6184" ph=" INSERT statement (TBL_EXPERIMENTS)" />
@@ -1105,21 +1138,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/giladkz/verticalEnsemble/CoTrainers/CoTrainingMetaLearning.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-385">
-          <caret line="398" column="0" lean-forward="false" selection-start-line="398" selection-start-column="0" selection-end-line="398" selection-end-column="0" />
+        <state relative-caret-position="154">
+          <caret line="111" column="53" lean-forward="false" selection-start-line="111" selection-start-column="53" selection-end-line="111" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="docComment;method#generateMetaFeatures#0;class#CoTrainingMetaLearning#0" expanded="false" />
             <element signature="method#generateMetaFeatures#0;class#CoTrainingMetaLearning#0" expanded="false" />
-            <marker date="1545395293123" expanded="true" signature="26598:26759" ph=" INSERT statement (TBL_SCORE_DISTRIBUTION_META_DATA)" />
-            <marker date="1545395293123" expanded="true" signature="28699:28880" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
-            <marker date="1545395293123" expanded="true" signature="30504:30685" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
-            <marker date="1545395293123" expanded="true" signature="32349:32488" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
-            <marker date="1545395293123" expanded="true" signature="32471:32488" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
-            <marker date="1545395293123" expanded="true" signature="33929:34068" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
-            <marker date="1545395293123" expanded="true" signature="35570:35686" ph=" INSERT statement (TBL_INSTANCE_IN_BATCH)" />
-            <marker date="1545395293123" expanded="true" signature="36827:36943" ph=" INSERT statement (TBL_INSTANCE_IN_BATCHE)" />
-            <marker date="1545395293123" expanded="true" signature="41349:41487" ph=" INSERT statement (TBL_BATCHE)" />
+            <marker date="1545728451902" expanded="true" signature="27099:27260" ph=" INSERT statement (TBL_SCORE_DISTRIBUTION_META_DATA)" />
+            <marker date="1545728451902" expanded="true" signature="29200:29381" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
+            <marker date="1545728451902" expanded="true" signature="31005:31186" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
+            <marker date="1545728451902" expanded="true" signature="32850:32989" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
+            <marker date="1545728451902" expanded="true" signature="32972:32989" ph=" INSERT statement (TBL_INSTANCES_META_DATA)" />
+            <marker date="1545728451902" expanded="true" signature="34430:34569" ph=" INSERT statement (TBL_BATCHES_META_DATA)" />
+            <marker date="1545728451902" expanded="true" signature="36071:36187" ph=" INSERT statement (TBL_INSTANCE_IN_BATCH)" />
+            <marker date="1545728451902" expanded="true" signature="37328:37444" ph=" INSERT statement (TBL_INSTANCE_IN_BATCHE)" />
+            <marker date="1545728451902" expanded="true" signature="42858:42996" ph=" INSERT statement (TBL_BATCHS_SCORE)" />
+            <marker date="1545728451902" expanded="true" signature="44299:44437" ph=" INSERT statement (TBL_BATCHE)" />
           </folding>
         </state>
       </provider>

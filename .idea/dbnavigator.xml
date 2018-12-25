@@ -23,11 +23,7 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="80165f1b-5c3c-4e28-8b8a-182266e34285">
-        <schema name="cotrain" object-types="column, constraint, function, index, procedure, table, dataset trigger, view" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="80165f1b-5c3c-4e28-8b8a-182266e34285">
