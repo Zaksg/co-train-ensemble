@@ -187,8 +187,8 @@ public class ScoreDistributionBasedAttributes {
         identifierPartitionsMap.put(identifierPartitionsMap.size(), "multiplication");
         //endregion
 
-        //now we use a pair of loops to analyze every pair of partitions once
-/*        for (int i=0; i<allPartitionsAndDistributions.size()-1; i++) {
+/*        //now we use a pair of loops to analyze every pair of partitions once
+        for (int i=0; i<allPartitionsAndDistributions.size()-1; i++) {
             for (int j=1; j<allPartitionsAndDistributions.size(); j++) {
                 if (i != j) {
                     TreeMap<Integer, AttributeInfo> crossPartitionFeatures = calculateScoreDistributionStatisticsOverMultipleSetsAndIterations(currentIterationIndex,

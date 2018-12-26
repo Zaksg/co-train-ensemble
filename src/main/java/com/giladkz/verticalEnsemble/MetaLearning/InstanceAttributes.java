@@ -307,9 +307,17 @@ public class InstanceAttributes {
         instanceAttributesToReturn.put(instanceAttributesToReturn.size(), instancePercentilePrevInnerIterationMedianunifiedDataset);
 
         //column data as in the dataset
-        //need to understand how to get the instance data from the data set
         List<ColumnInfo> datasetColInfo = originalDataset.getAllColumns(false);
-//        List<ColumnInfo> datasetColInfo = trainingDataset.getColumns(Arrays.asList()); //need to be the col indices and not instance index
+        DescriptiveStatistics numericAllPercentile = new DescriptiveStatistics();
+        DescriptiveStatistics numericAssignedPercentile = new DescriptiveStatistics();
+        DescriptiveStatistics numericHigherConfPercentile = new DescriptiveStatistics();
+        DescriptiveStatistics discreteAllMode = new DescriptiveStatistics();
+        DescriptiveStatistics discreteAssignedMode = new DescriptiveStatistics();
+        DescriptiveStatistics discreteHigherMode = new DescriptiveStatistics();
+
+        int numericHigherCount = 0;
+        int discreteHigherCount = 0;
+
         for (ColumnInfo colInf: datasetColInfo) {
             Column col = colInf.getColumn();
 
@@ -326,9 +334,10 @@ public class InstanceAttributes {
                 Percentile p = new Percentile();
                 p.setData(normalizedColumnData);
                 double instancePercentileColumn = p.evaluate(normalizedInstancePosData);
-                AttributeInfo instancePercentileColumnAttr = new AttributeInfo
-                        ("instancePercentileColumn_" + instancePosRelativeIndex + "_" + currentIterationIndex, Column.columnType.Numeric, instancePercentileColumn, originalDataset.getNumOfClasses());
-                instanceAttributesToReturn.put(instanceAttributesToReturn.size(), instancePercentileColumnAttr);
+                numericAllPercentile.addValue(instancePercentileColumn);
+//                AttributeInfo instancePercentileColumnAttr = new AttributeInfo
+//                        ("instancePercentileColumn_" + instancePosRelativeIndex + "_" + currentIterationIndex, Column.columnType.Numeric, instancePercentileColumn, originalDataset.getNumOfClasses());
+//                instanceAttributesToReturn.put(instanceAttributesToReturn.size(), instancePercentileColumnAttr);
 
 
                 //percentile for the instance from total column - assign class and
@@ -353,9 +362,10 @@ public class InstanceAttributes {
 
                     p.setData(normAssignedLabelIndecies);
                     double assignedLabelPercentile = p.evaluate(normalizedInstancePosData);
-                    AttributeInfo assignedLabelPercentileAttr = new AttributeInfo
-                            ("assignedLabelPercentile_" + originalIndex + "_" + currentIterationIndex, Column.columnType.Numeric, assignedLabelPercentile, originalDataset.getNumOfClasses());
-                    instanceAttributesToReturn.put(instanceAttributesToReturn.size(), assignedLabelPercentileAttr);
+                    numericAssignedPercentile.addValue(assignedLabelPercentile);
+//                    AttributeInfo assignedLabelPercentileAttr = new AttributeInfo
+//                            ("assignedLabelPercentile_" + originalIndex + "_" + currentIterationIndex, Column.columnType.Numeric, assignedLabelPercentile, originalDataset.getNumOfClasses());
+//                    instanceAttributesToReturn.put(instanceAttributesToReturn.size(), assignedLabelPercentileAttr);
 
                     double[] higherValueIndecies = new double[higherValueIndeciesTemp.size()];
                     if (higherValueIndeciesTemp.size() > 0){
@@ -365,14 +375,16 @@ public class InstanceAttributes {
                         double[] normHigherValueIndecies = norm100and0(Arrays.stream(higherValueIndecies).max().getAsDouble(), Arrays.stream(higherValueIndecies).min().getAsDouble(), higherValueIndecies);
                         p.setData(normHigherValueIndecies);
                         double higherValuePercentile = p.evaluate(normAssignedLabelIndecies);
-                        AttributeInfo higherValuePercentileAttr = new AttributeInfo
-                                ("higherValuePercentile_" + originalIndex + "_" + currentIterationIndex, Column.columnType.Numeric, higherValuePercentile, originalDataset.getNumOfClasses());
-                        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), higherValuePercentileAttr );
-                    }else{
+                        numericHigherConfPercentile.addValue(higherValuePercentile);
+                        numericHigherCount++;
+//                        AttributeInfo higherValuePercentileAttr = new AttributeInfo
+//                                ("higherValuePercentile_" + originalIndex + "_" + currentIterationIndex, Column.columnType.Numeric, higherValuePercentile, originalDataset.getNumOfClasses());
+//                        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), higherValuePercentileAttr );
+                    }/*else{
                         AttributeInfo higherValuePercentileAttr = new AttributeInfo
                                 ("higherValuePercentile_" + originalIndex + "_" + currentIterationIndex, Column.columnType.Numeric, -1.0, originalDataset.getNumOfClasses());
                         instanceAttributesToReturn.put(instanceAttributesToReturn.size(), higherValuePercentileAttr );
-                    }
+                    }*/
 
                 }
 
@@ -397,9 +409,10 @@ public class InstanceAttributes {
                 //prob to the value in the dataset
                 double instanceValueCount = valuesCount.get(instancePosData);
                 double instanceValueProb = instanceValueCount/totalValues;
-                AttributeInfo instanceValueProbAttr = new AttributeInfo
-                        ("instanceValueProb_" + originalIndex + "_" + currentIterationIndex, Column.columnType.Numeric, instanceValueProb, originalDataset.getNumOfClasses());
-                instanceAttributesToReturn.put(instanceAttributesToReturn.size(), instanceValueProbAttr);
+                discreteAllMode.addValue(instanceValueProb);
+//                AttributeInfo instanceValueProbAttr = new AttributeInfo
+//                        ("instanceValueProb_" + originalIndex + "_" + currentIterationIndex, Column.columnType.Numeric, instanceValueProb, originalDataset.getNumOfClasses());
+//                instanceAttributesToReturn.put(instanceAttributesToReturn.size(), instanceValueProbAttr);
                 //Statistics on the probability of each value given all other values (in the assigned class)
                 for (int partitionIndex : evaluationResultsPerSetAndInteration.keySet()) {
                     double[][] allColumnsScore = evaluationResultsPerSetAndInteration.get(partitionIndex).getIterationEvaluationInfo(currentIterationIndex).getScoreDistributions();
@@ -439,15 +452,39 @@ public class InstanceAttributes {
                     }catch (Exception e){}
 
 
-                    AttributeInfo instanceValueLabeledProbAttr = new AttributeInfo
-                            ("instanceValueLabeledProb" + originalIndex + "_" + currentIterationIndex + '_' + partitionIndex, Column.columnType.Numeric, instanceValueLabeledProb, originalDataset.getNumOfClasses());
-                    instanceAttributesToReturn.put(instanceAttributesToReturn.size(), instanceValueLabeledProbAttr);
-                    AttributeInfo instanceValueHigherProbAttr = new AttributeInfo
-                            ("instanceValueHigherProb" + originalIndex + "_" + currentIterationIndex + '_' + partitionIndex, Column.columnType.Numeric, instanceValueHigherProb, originalDataset.getNumOfClasses());
-                    instanceAttributesToReturn.put(instanceAttributesToReturn.size(), instanceValueHigherProbAttr);
+                    discreteAssignedMode.addValue(instanceValueLabeledProb);
+//                    AttributeInfo instanceValueLabeledProbAttr = new AttributeInfo
+//                            ("instanceValueLabeledProb" + originalIndex + "_" + currentIterationIndex + '_' + partitionIndex, Column.columnType.Numeric, instanceValueLabeledProb, originalDataset.getNumOfClasses());
+//                    instanceAttributesToReturn.put(instanceAttributesToReturn.size(), instanceValueLabeledProbAttr);
+                    if (instanceValueHigherProb > -1.0){
+                        discreteHigherCount++;
+                        discreteHigherMode.addValue(instanceValueHigherProb);
+//                        AttributeInfo instanceValueHigherProbAttr = new AttributeInfo
+//                                ("instanceValueHigherProb" + originalIndex + "_" + currentIterationIndex + '_' + partitionIndex, Column.columnType.Numeric, instanceValueHigherProb, originalDataset.getNumOfClasses());
+//                        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), instanceValueHigherProbAttr);
+                    }
+
                 }
             }
             //else continue;
+        }
+        instanceAttributesToReturn.putAll(evalDecsStats("instancePercentileColumn_" + originalIndex + "_" + currentIterationIndex, numericAllPercentile, instanceAttributesToReturn.size()));
+        instanceAttributesToReturn.putAll(evalDecsStats("assignedLabelPercentile_" + originalIndex + "_" + currentIterationIndex, numericAssignedPercentile, instanceAttributesToReturn.size()));
+        if (numericHigherCount > 0){
+            instanceAttributesToReturn.putAll(evalDecsStats("higherValuePercentile_" + originalIndex + "_" + currentIterationIndex, numericHigherConfPercentile, instanceAttributesToReturn.size()));
+        }
+        else{
+            double[] emptyValues ={-1.0, -1.0, -1.0, -1.0, -1.0};
+            instanceAttributesToReturn.putAll(evalDecsStats("higherValuePercentile_" + originalIndex + "_" + currentIterationIndex, new DescriptiveStatistics(emptyValues), instanceAttributesToReturn.size()));
+        }
+        instanceAttributesToReturn.putAll(evalDecsStats("instanceValueProb_" + originalIndex + "_" + currentIterationIndex, discreteAllMode, instanceAttributesToReturn.size()));
+        instanceAttributesToReturn.putAll(evalDecsStats("instanceValueLabeledProb_" + originalIndex + "_" + currentIterationIndex, discreteAssignedMode, instanceAttributesToReturn.size()));
+        if (discreteHigherCount > 0){
+            instanceAttributesToReturn.putAll(evalDecsStats("instanceValueHigherProb_" + originalIndex + "_" + currentIterationIndex, discreteHigherMode, instanceAttributesToReturn.size()));
+        }
+        else{
+            double[] emptyValues ={-1.0, -1.0, -1.0, -1.0, -1.0};
+            instanceAttributesToReturn.putAll(evalDecsStats("instanceValueHigherProb_" + originalIndex + "_" + currentIterationIndex, new DescriptiveStatistics(emptyValues), instanceAttributesToReturn.size()));
         }
 
         //fix NaN: convert to -1.0
@@ -469,5 +506,35 @@ public class InstanceAttributes {
             result[i] = ((arr[i] - min + 0.01)/(max - min + 0.01))*100;
         }
         return result;
+    }
+
+    private TreeMap<Integer, AttributeInfo> evalDecsStats(String attName, DescriptiveStatistics stats, int firstKey){
+        TreeMap<Integer, AttributeInfo> attributesToReturn = new TreeMap<>();
+        //max
+        AttributeInfo attMax = new AttributeInfo
+                (attName + " max", Column.columnType.Numeric, stats.getMax(), -1);
+        attributesToReturn.put(firstKey, attMax);
+        //min
+        firstKey++;
+        AttributeInfo attMin = new AttributeInfo
+                (attName + " min", Column.columnType.Numeric, stats.getMin(), -1);
+        attributesToReturn.put(firstKey, attMin);
+        //mean
+        firstKey++;
+        AttributeInfo attMean = new AttributeInfo
+                (attName + " mean", Column.columnType.Numeric, stats.getMean(), -1);
+        attributesToReturn.put(firstKey, attMean);
+        //std
+        firstKey++;
+        AttributeInfo attStd = new AttributeInfo
+                (attName + " std", Column.columnType.Numeric, stats.getStandardDeviation(), -1);
+        attributesToReturn.put(firstKey, attStd);
+        //p-50
+        firstKey++;
+        AttributeInfo arrMedian = new AttributeInfo
+                (attName + " median", Column.columnType.Numeric, stats.getPercentile(50), -1);
+        attributesToReturn.put(firstKey, arrMedian);
+
+        return attributesToReturn;
     }
 }

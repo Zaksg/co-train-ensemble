@@ -19,6 +19,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -125,7 +126,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                     getDatasetInstancesSucc = true;
                 }catch (Exception e){
                     Thread.sleep(1000);
-                    System.out.println("failed reading file, sleep for 1 second");
+                    System.out.println("failed reading file, sleep for 1 second, for try: " + num_of_iterations + " at time: " + LocalDateTime.now());
                     getDatasetInstancesSucc = false;
                 }
             }
@@ -273,9 +274,9 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
             //writeResultsToBatchesMetaFeatures(selectedBatchAttributeCurrentIterationList, exp_id, i,  -1 + iteration*(-1), properties, dataset);
 
             int[] insertBatchInfoToWrite = new int[3];
-            insertBatchInfoToWrite[0]=iteration*(-1);
-            insertBatchInfoToWrite[1]=exp_id;
-            insertBatchInfoToWrite[2]=iteration;
+            insertBatchInfoToWrite[0]=exp_id;
+            insertBatchInfoToWrite[1]=iteration;
+            insertBatchInfoToWrite[2]=i;
             writeInsertBatchInGroup.put(indicesOfAddedInstances, insertBatchInfoToWrite);
             //writeToInstancesInBatchTbl(iteration*(-1), exp_id, iteration, indicesOfAddedInstances, properties);
 
@@ -615,16 +616,17 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
         Class.forName(myDriver);
         Connection conn = DriverManager.getConnection(myUrl, properties.getProperty("DBUser"), properties.getProperty("DBPassword"));
         for (Map.Entry<ArrayList<Integer>, int[]> outerEntry : writeInsertBatchInGroup.entrySet()){
-            String sql = "insert into tbl_Instance_In_Batch(batch_id, exp_id, exp_iteration, instance_id, instance_pos) values (?, ?, ?, ?, ?)";
+            String sql = "insert into tbl_Instance_In_Batch(exp_id, exp_iteration, inner_iteration_id,batch_id, instance_pos) values (?, ?, ?, ?, ?)";
             ArrayList<Integer> instancesBatchPos = outerEntry.getKey();
             int[] instanceToBatch = outerEntry.getValue();
             for(Integer instancePosInBatch : instancesBatchPos){
                 //insert to table
+                int batch_id = instanceToBatch[2]*(-1) - 1;
                 PreparedStatement preparedStmt = conn.prepareStatement(sql);
                 preparedStmt.setInt (1, instanceToBatch[0]);
                 preparedStmt.setInt (2, instanceToBatch[1]);
                 preparedStmt.setInt (3, instanceToBatch[2]);
-                preparedStmt.setInt (4, instancePosInBatch);
+                preparedStmt.setInt (4, batch_id);
                 preparedStmt.setInt (5, instancePosInBatch);
 
                 preparedStmt.execute();

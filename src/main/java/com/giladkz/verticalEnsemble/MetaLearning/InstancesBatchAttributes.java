@@ -296,7 +296,7 @@ public class InstancesBatchAttributes {
             }
             for (int numOfIterationsBack : numOfIterationsBackToAnalyze) {
                 if (currentIterationIndex >= numOfIterationsBack) {
-                    double[][] prevIterScoreDist = evaluationResultsPerSetAndInteration.get(partitionIndex).getIterationEvaluationInfo(currentIterationIndex).getScoreDistributions();
+                    double[][] prevIterScoreDist = evaluationResultsPerSetAndInteration.get(partitionIndex).getIterationEvaluationInfo(currentIterationIndex - numOfIterationsBack).getScoreDistributions();
                     double[] prevIterationTargetClassScoreDistribution = new double[prevIterScoreDist.length];
                     for (int j = 0; j < currentIterScoreDist.length; j++) {
                         prevIterationTargetClassScoreDistribution[j] = prevIterScoreDist[j][targetClassIndex];
