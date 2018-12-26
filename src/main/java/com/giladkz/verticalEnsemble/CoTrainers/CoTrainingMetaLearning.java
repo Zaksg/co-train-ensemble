@@ -114,9 +114,22 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
             unifiedDatasetEvaulationResults.addEvaluationInfo(unifiedSetEvaluationResults, i);
 
             /*enter the meta features generation here*/
+            Dataset labeledToMetaFeatures = dataset;
+            Dataset unlabeledToMetaFeatures = dataset;
             int targetClassIndex = dataset.getMinorityClassIndex();
-            Dataset labeledToMetaFeatures = getDataSetByInstancesIndices(dataset,labeledTrainingSetIndices,properties);
-            Dataset unlabeledToMetaFeatures = getDataSetByInstancesIndices(dataset,unlabeledTrainingSetIndices,properties);
+            boolean getDatasetInstancesSucc = false;
+            for (int numberOfTries = 0; numberOfTries < 5 && !getDatasetInstancesSucc; numberOfTries++) {
+                try{
+                    labeledToMetaFeatures = getDataSetByInstancesIndices(dataset,labeledTrainingSetIndices,properties);
+                    unlabeledToMetaFeatures = getDataSetByInstancesIndices(dataset,unlabeledTrainingSetIndices,properties);
+                    getDatasetInstancesSucc = true;
+                }catch (Exception e){
+                    Thread.sleep(1000);
+                    System.out.println("failed reading file, sleep for 1 second");
+                    getDatasetInstancesSucc = false;
+                }
+            }
+
             TreeMap<Integer, EvaluationPerIteraion> evaluationResultsPerSetAndInterationTree = new TreeMap<>(evaluationResultsPerSetAndInteration);
 
             //score distribution
