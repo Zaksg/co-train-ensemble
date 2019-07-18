@@ -49,6 +49,7 @@ public class CoTrainerOriginal extends CoTrainerAbstract {
         }
 
         //before we begin the co-training process, we test the performance on the original dataset
+        System.out.println("Pre-run Original model results for dataset: "+original_arff_file+ " : ");
         RunExperimentsOnTestSet(exp_id, iteration, -1, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions, labeledTrainingSetIndices, properties);
 
         //And now we can begin the iterative process
@@ -98,6 +99,7 @@ public class CoTrainerOriginal extends CoTrainerAbstract {
             unlabeledTrainingSetIndices = unlabeledTrainingSetIndices.stream().filter(line -> !allIndeicesToAdd.contains(line)).collect(Collectors.toList());
 
             //step 5 - train the models using the current instances and apply them to the test set
+            System.out.println("Original model results for dataset: "+original_arff_file+" scores of iteration: " + i + ": ");
             RunExperimentsOnTestSet(exp_id, iteration, i, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions, labeledTrainingSetIndices, properties);
         }
         return null;

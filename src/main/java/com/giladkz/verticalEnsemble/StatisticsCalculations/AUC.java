@@ -25,7 +25,7 @@ public class AUC {
     public AUC() {
     }
 
-    /**
+     /**
      * Caulculate AUC for binary classifier.
      * @param truth The sample labels
      * @param probability The posterior probability of positive class.
@@ -70,12 +70,21 @@ public class AUC {
         }
 
         double auc = 0.0;
+        double auc_neg = 0.0;
         for (int i = 0; i < label.length; i++) {
-            if (label[i] == 1)
+            if (label[i] == 1){
                 auc += rank[i];
+            }else{
+                auc_neg += rank[i];
+            }
         }
-
-        auc = (auc - (pos * (pos+1) / 2.0)) / (pos * neg);
+        double u1 = (auc - (pos * (pos+1) / 2.0));
+        double u2 = (auc_neg - (neg * (neg+1) / 2.0));
+        double n1n2 = (pos * neg);
+        double u = Math.max(u1, u2);
+        auc = u1 / n1n2;
+        auc_neg = u2 / n1n2;
+        double auc_fixed = u/n1n2;
         return auc;
     }
 }

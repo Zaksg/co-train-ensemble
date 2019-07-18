@@ -62,6 +62,12 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
         Fold trainingFold = dataset.getTrainingFolds().get(0); //There should only be one training fold in this type of project
         if (trainingFold.getIndices().size()-initial_number_of_labled_samples > initial_unlabeled_set_size) {
             //ToDo: add a random sampling function
+            for (int index : trainingFold.getIndices()) {
+                if (!labeledTrainingSetIndices.contains(index) && unlabeledTrainingSetIndices.size() < initial_unlabeled_set_size
+                        && new Random().nextInt(100)< 96) {
+                    unlabeledTrainingSetIndices.add(index);
+                }
+            }
         }
         else {
             for (int index : trainingFold.getIndices()) {
@@ -95,7 +101,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
 
 
             //step 1 - train the classifiers on the labeled training set and run on the unlabeled training set
-            System.out.println("start iteration with: labaled: " + labeledTrainingSetIndices.size() + ";  unlabeled: " + unlabeledTrainingSetIndices.size() );
+//            System.out.println("start iteration with: labaled: " + labeledTrainingSetIndices.size() + ";  unlabeled: " + unlabeledTrainingSetIndices.size() );
 
             for (int partitionIndex : feature_sets.keySet()) {
                 EvaluationInfo evaluationResults = runClassifier(properties.getProperty("classifier"),
@@ -126,7 +132,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                     getDatasetInstancesSucc = true;
                 }catch (Exception e){
                     Thread.sleep(1000);
-                    System.out.println("failed reading file, sleep for 1 second, for try: " + num_of_iterations + " at time: " + LocalDateTime.now());
+//                    System.out.println("failed reading file, sleep for 1 second, for try: " + num_of_iterations + " at time: " + LocalDateTime.now());
                     getDatasetInstancesSucc = false;
                 }
             }
@@ -149,7 +155,8 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
             //pick random 1000 batches of 8 instances and get meta features
             //TO-DO: extract random selection to different class in order to control the changes of other selection methods
             Random rnd = new Random((i + Integer.parseInt(properties.getProperty("randomSeed"))));
-            for (int batchIndex = 0; batchIndex < Integer.parseInt(properties.getProperty("numOfBatchedPerIteration")); batchIndex++) {
+            int numOfBatches = (int) Math.min(Integer.parseInt(properties.getProperty("numOfBatchedPerIteration")),Math.round(0.3*unlabeledTrainingSetIndices.size()));
+            for (int batchIndex = 0; batchIndex < numOfBatches; batchIndex++) {
                 ArrayList<Integer> instancesBatchOrginalPos = new ArrayList<>();
                 ArrayList<Integer> instancesBatchSelectedPos = new ArrayList<>();
 
@@ -224,7 +231,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
                     //run the classifier with this batch: on cloned dataset and re-create the run-experiment method (Batches_Score)
                     writeSampleBatchScoreInGroup.putAll(runClassifierOnSampledBatch(exp_id, iteration, i, batchIndex, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions,assignedLabelsOriginalIndex, labeledTrainingSetIndices, properties));
 //                    runClassifierOnSampledBatch(exp_id, iteration, i, batchIndex, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions,assignedLabelsOriginalIndex, labeledTrainingSetIndices, properties);
-                    System.out.println("done sample random batches for batch: " + batchIndex + ", iteration: " + i);
+//                    System.out.println("done sample random batches for batch: " + batchIndex + ", iteration: " + i);
                 }
                 writeInstanceMetaDataInGroupTemp.clear();
             }
@@ -313,7 +320,7 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
             //step 5 - train the models using the current instances and apply them to the test set
             RunExperimentsOnTestSet(exp_id, iteration, i, dataset, dataset.getTestFolds().get(0), dataset.getTrainingFolds().get(0), datasetPartitions, labeledTrainingSetIndices, properties);
 
-            System.out.println("done insert batch and run the classifier for iteration: " + i);
+            System.out.println("dataset: "+dataset.getName()+" done insert batch and run the classifier for iteration: " + i);
 
 
             /* old version call
@@ -459,6 +466,9 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
             else if(metaFeatureValueRaw instanceof Double){
                 metaFeatureValue = ((Double) metaFeatureValueRaw).doubleValue();
             }
+            if (Double.isNaN(metaFeatureValue)){
+                metaFeatureValue = -1.0;
+            }
 
             //insert to table
             PreparedStatement preparedStmt = conn.prepareStatement(sql);
@@ -492,21 +502,28 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
             for(Map.Entry<Integer,AttributeInfo> entry : instanceMetaData.entrySet()){
                 String metaFeatureName = entry.getValue().getAttributeName();
                 String metaFeatureValue = entry.getValue().getValue().toString();
-                //insert to table
-                PreparedStatement preparedStmt = conn.prepareStatement(sql);
-                preparedStmt.setInt (1, att_id);
-                preparedStmt.setInt (2, instanceInfo[0]);
-                preparedStmt.setInt (3, instanceInfo[1]);
-                preparedStmt.setInt(4, instanceInfo[2]);
-                preparedStmt.setInt(5, instanceInfo[3]);
-                preparedStmt.setInt (6, instanceInfo[4]);
-                preparedStmt.setString   (7, metaFeatureName);
-                preparedStmt.setString   (8, metaFeatureValue);
 
-                preparedStmt.execute();
-                preparedStmt.close();
+                try{
+                    //insert to table
+                    PreparedStatement preparedStmt = conn.prepareStatement(sql);
+                    preparedStmt.setInt (1, att_id);
+                    preparedStmt.setInt (2, instanceInfo[0]);
+                    preparedStmt.setInt (3, instanceInfo[1]);
+                    preparedStmt.setInt(4, instanceInfo[2]);
+                    preparedStmt.setInt(5, instanceInfo[3]);
+                    preparedStmt.setInt (6, instanceInfo[4]);
+                    preparedStmt.setString   (7, metaFeatureName);
+                    preparedStmt.setString   (8, metaFeatureValue);
 
-                att_id++;
+                    preparedStmt.execute();
+                    preparedStmt.close();
+
+                    att_id++;
+                }catch (Exception e){
+                    e.printStackTrace();
+                    System.out.println("failed insert instance for: (" + att_id+", "+instanceInfo[0]+", "+instanceInfo[1]+", "+instanceInfo[2]
+                    + ", "+ instanceInfo[3]+", "+ instanceInfo[4]+", "+ metaFeatureName + ", "+ metaFeatureValue + ")");
+                }
             }
         }
         conn.close();
@@ -560,19 +577,27 @@ public class CoTrainingMetaLearning extends CoTrainerAbstract {
             for(Map.Entry<Integer,AttributeInfo> entry : batchMetaData.entrySet()){
                 String metaFeatureName = entry.getValue().getAttributeName();
                 String metaFeatureValue = entry.getValue().getValue().toString();
-                //insert to table
-                PreparedStatement preparedStmt = conn.prepareStatement(sql);
-                preparedStmt.setInt(1, att_id);
-                preparedStmt.setInt(2, batchInfo[0]);
-                preparedStmt.setInt(3, batchInfo[1]);
-                preparedStmt.setInt(4, batchInfo[2]);
-                preparedStmt.setString(5, metaFeatureName);
-                preparedStmt.setString(6, metaFeatureValue);
+                try{
+                    //insert to table
+                    PreparedStatement preparedStmt = conn.prepareStatement(sql);
+                    preparedStmt.setInt(1, att_id);
+                    preparedStmt.setInt(2, batchInfo[0]);
+                    preparedStmt.setInt(3, batchInfo[1]);
+                    preparedStmt.setInt(4, batchInfo[2]);
+                    preparedStmt.setString(5, metaFeatureName);
+                    preparedStmt.setString(6, metaFeatureValue);
 
-                preparedStmt.execute();
-                preparedStmt.close();
+                    preparedStmt.execute();
+                    preparedStmt.close();
 
-                att_id++;
+                    att_id++;
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    System.out.println("failed insert batch for: (" + att_id+", "+batchInfo[0]+", "+batchInfo[1]+", "+batchInfo[2]
+                            + ", "+ metaFeatureName + ", "+ metaFeatureValue + ")");
+                }
+
             }
         }
         conn.close();

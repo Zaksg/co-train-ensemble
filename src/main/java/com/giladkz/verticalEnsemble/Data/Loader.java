@@ -39,8 +39,8 @@ public class Loader {
             Instances structure = arffReader.getStructure();
             Instances data = arffReader.getData();
 
-            System.out.println("num of attributes:  " + structure.numAttributes());
-            System.out.println("num of instances:  " + data.numInstances());
+//            System.out.println("num of attributes:  " + structure.numAttributes());
+//            System.out.println("num of instances:  " + data.numInstances());
 
             //Begin by iterating over the columns and generating the corresponding objects
             List<ColumnInfo> columns = processHeader(structure, data.numInstances(),classAttIndex);
@@ -97,12 +97,12 @@ public class Loader {
      * @param distinctValIndices
      * @return
      */
-    public Dataset readArffWithFixedTrainTestFolds(Reader trainSetReader, Reader testSetReader, int randomSeed, List<Integer> distinctValIndices, int classAttIndex, double trainingSetPercentage) {
+    public Dataset[] readArffWithFixedTrainTestFolds(Reader trainSetReader, Reader testSetReader, int randomSeed, List<Integer> distinctValIndices, int classAttIndex, double trainingSetPercentage) {
         ArffLoader.ArffReader arffReader;
         try {
             Dataset trainDataset = readArff(trainSetReader, randomSeed, distinctValIndices, classAttIndex, trainingSetPercentage, null);
             Dataset testDataset = readArff(testSetReader, randomSeed, distinctValIndices, classAttIndex, trainingSetPercentage, null);
-
+            return new Dataset[]{trainDataset, testDataset};
         }
         catch (Exception e) {
             Throwables.propagate(e);
@@ -288,7 +288,7 @@ public class Loader {
                 //Now see if the instance can be assigned to the fold
                 Fold fold = folds.get(foldIdx);
 
-                if (fold.getNumOfInstancesPerClass(instanceClass) < numOfInstancesPerFoldType.get(fold.getTypeOfFold()).get(instanceClass)) {
+                if (fold.getNumOfInstancesPerClass(instanceClass) <= /*<*/ numOfInstancesPerFoldType.get(fold.getTypeOfFold()).get(instanceClass)) {
                     fold.addInstance(i, instanceClass);
                     foundAssignment = true;
                 }

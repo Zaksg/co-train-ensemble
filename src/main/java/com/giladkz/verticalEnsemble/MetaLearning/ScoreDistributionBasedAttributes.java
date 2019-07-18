@@ -746,7 +746,12 @@ public class ScoreDistributionBasedAttributes {
         ShapiroWilk sh = new ShapiroWilk();
         FlatDataCollection fdc1 = new FlatDataCollection(Arrays.asList(samplesConfidenceScoreValues.values().toArray()));
         for (double pval : pValuesList) {
-            boolean isNormallyDistributed = sh.test(fdc1, pval);
+            boolean isNormallyDistributed;
+            try{
+                isNormallyDistributed = sh.test(fdc1, pval);
+            }catch (Exception e){
+                isNormallyDistributed = false;
+            }
             normalDistributionGoodnessOfFitPVAlues.put(pval, isNormallyDistributed);
         }
 
@@ -764,7 +769,13 @@ public class ScoreDistributionBasedAttributes {
         }
         FlatDataCollection fdc2 = new FlatDataCollection(Arrays.asList(logNormalSamplesConfidenceScoreValues.values().toArray()));
         for (double pval : pValuesList) {
-            boolean isLogNormallyDistributed = sh.test(fdc2, pval);
+            boolean isLogNormallyDistributed;
+            try{
+                isLogNormallyDistributed = sh.test(fdc2, pval);
+            }catch (Exception e){
+                isLogNormallyDistributed = false;
+            }
+
             logNormalDistributionGoodnessOfFitPVAlue.put(pval, isLogNormallyDistributed);
         }
 
@@ -788,7 +799,12 @@ public class ScoreDistributionBasedAttributes {
         transposeDataList.put(1, new FlatDataList(Arrays.asList(samplesConfidenceScoreValues.values().toArray()))); //the values we sampled from the results
 
         for (double pval : pValuesList) {
-            boolean isUniformlyDistributed = KolmogorovSmirnovIndependentSamples.test(transposeDataList, true, pval);
+            boolean isUniformlyDistributed;
+            try{
+                isUniformlyDistributed = KolmogorovSmirnovIndependentSamples.test(transposeDataList, true, pval);
+            }catch (Exception e){
+                isUniformlyDistributed = false;
+            }
             uniformDistributionGoodnessOfFitPVAlue.put(pval,isUniformlyDistributed);
         }
 

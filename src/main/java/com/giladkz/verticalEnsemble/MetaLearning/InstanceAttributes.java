@@ -316,6 +316,7 @@ public class InstanceAttributes {
         DescriptiveStatistics discreteHigherMode = new DescriptiveStatistics();
 
         int numericHigherCount = 0;
+        int numericRegCount = 0;
         int discreteHigherCount = 0;
 
         for (ColumnInfo colInf: datasetColInfo) {
@@ -358,34 +359,24 @@ public class InstanceAttributes {
                     for (int i = 0; i < assignedLabelIndeciesTemp.size(); i++) {
                         assignedLabelIndecies[i] = assignedLabelIndeciesTemp.get(i);
                     }
-                    double[] normAssignedLabelIndecies = norm100and0(Arrays.stream(assignedLabelIndecies).max().getAsDouble(), Arrays.stream(assignedLabelIndecies).min().getAsDouble(), assignedLabelIndecies);
-
-                    p.setData(normAssignedLabelIndecies);
-                    double assignedLabelPercentile = p.evaluate(normalizedInstancePosData);
-                    numericAssignedPercentile.addValue(assignedLabelPercentile);
-//                    AttributeInfo assignedLabelPercentileAttr = new AttributeInfo
-//                            ("assignedLabelPercentile_" + originalIndex + "_" + currentIterationIndex, Column.columnType.Numeric, assignedLabelPercentile, originalDataset.getNumOfClasses());
-//                    instanceAttributesToReturn.put(instanceAttributesToReturn.size(), assignedLabelPercentileAttr);
-
-                    double[] higherValueIndecies = new double[higherValueIndeciesTemp.size()];
-                    if (higherValueIndeciesTemp.size() > 0){
-                        for (int i = 0; i < higherValueIndeciesTemp.size(); i++) {
-                            higherValueIndecies[i] = higherValueIndeciesTemp.get(i);
+                    if (Arrays.stream(assignedLabelIndecies).max().isPresent() && Arrays.stream(assignedLabelIndecies).min().isPresent()){
+                        double[] normAssignedLabelIndecies = norm100and0(Arrays.stream(assignedLabelIndecies).max().getAsDouble(), Arrays.stream(assignedLabelIndecies).min().getAsDouble(), assignedLabelIndecies);
+                        p.setData(normAssignedLabelIndecies);
+                        double assignedLabelPercentile = p.evaluate(normalizedInstancePosData);
+                        numericAssignedPercentile.addValue(assignedLabelPercentile);
+                        numericRegCount++;
+                        double[] higherValueIndecies = new double[higherValueIndeciesTemp.size()];
+                        if (higherValueIndeciesTemp.size() > 0){
+                            for (int i = 0; i < higherValueIndeciesTemp.size(); i++) {
+                                higherValueIndecies[i] = higherValueIndeciesTemp.get(i);
+                            }
+                            double[] normHigherValueIndecies = norm100and0(Arrays.stream(higherValueIndecies).max().getAsDouble(), Arrays.stream(higherValueIndecies).min().getAsDouble(), higherValueIndecies);
+                            p.setData(normHigherValueIndecies);
+                            double higherValuePercentile = p.evaluate(normAssignedLabelIndecies);
+                            numericHigherConfPercentile.addValue(higherValuePercentile);
+                            numericHigherCount++;
                         }
-                        double[] normHigherValueIndecies = norm100and0(Arrays.stream(higherValueIndecies).max().getAsDouble(), Arrays.stream(higherValueIndecies).min().getAsDouble(), higherValueIndecies);
-                        p.setData(normHigherValueIndecies);
-                        double higherValuePercentile = p.evaluate(normAssignedLabelIndecies);
-                        numericHigherConfPercentile.addValue(higherValuePercentile);
-                        numericHigherCount++;
-//                        AttributeInfo higherValuePercentileAttr = new AttributeInfo
-//                                ("higherValuePercentile_" + originalIndex + "_" + currentIterationIndex, Column.columnType.Numeric, higherValuePercentile, originalDataset.getNumOfClasses());
-//                        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), higherValuePercentileAttr );
-                    }/*else{
-                        AttributeInfo higherValuePercentileAttr = new AttributeInfo
-                                ("higherValuePercentile_" + originalIndex + "_" + currentIterationIndex, Column.columnType.Numeric, -1.0, originalDataset.getNumOfClasses());
-                        instanceAttributesToReturn.put(instanceAttributesToReturn.size(), higherValuePercentileAttr );
-                    }*/
-
+                    }
                 }
 
             }
@@ -469,12 +460,19 @@ public class InstanceAttributes {
             //else continue;
         }
         instanceAttributesToReturn.putAll(evalDecsStats("instancePercentileColumn_" + originalIndex + "_" + currentIterationIndex, numericAllPercentile, instanceAttributesToReturn.size()));
-        instanceAttributesToReturn.putAll(evalDecsStats("assignedLabelPercentile_" + originalIndex + "_" + currentIterationIndex, numericAssignedPercentile, instanceAttributesToReturn.size()));
+        double[] emptyValues ={-1.0, -1.0, -1.0, -1.0, -1.0};
+        if (numericRegCount > 0){
+            instanceAttributesToReturn.putAll(evalDecsStats("assignedLabelPercentile_" + originalIndex + "_" + currentIterationIndex, numericAssignedPercentile, instanceAttributesToReturn.size()));
+        }
+        else{
+            instanceAttributesToReturn.putAll(evalDecsStats("assignedLabelPercentile_" + originalIndex + "_" + currentIterationIndex, new DescriptiveStatistics(emptyValues), instanceAttributesToReturn.size()));
+        }
+
         if (numericHigherCount > 0){
             instanceAttributesToReturn.putAll(evalDecsStats("higherValuePercentile_" + originalIndex + "_" + currentIterationIndex, numericHigherConfPercentile, instanceAttributesToReturn.size()));
         }
         else{
-            double[] emptyValues ={-1.0, -1.0, -1.0, -1.0, -1.0};
+
             instanceAttributesToReturn.putAll(evalDecsStats("higherValuePercentile_" + originalIndex + "_" + currentIterationIndex, new DescriptiveStatistics(emptyValues), instanceAttributesToReturn.size()));
         }
         instanceAttributesToReturn.putAll(evalDecsStats("instanceValueProb_" + originalIndex + "_" + currentIterationIndex, discreteAllMode, instanceAttributesToReturn.size()));
@@ -483,7 +481,7 @@ public class InstanceAttributes {
             instanceAttributesToReturn.putAll(evalDecsStats("instanceValueHigherProb_" + originalIndex + "_" + currentIterationIndex, discreteHigherMode, instanceAttributesToReturn.size()));
         }
         else{
-            double[] emptyValues ={-1.0, -1.0, -1.0, -1.0, -1.0};
+//            double[] emptyValues ={-1.0, -1.0, -1.0, -1.0, -1.0};
             instanceAttributesToReturn.putAll(evalDecsStats("instanceValueHigherProb_" + originalIndex + "_" + currentIterationIndex, new DescriptiveStatistics(emptyValues), instanceAttributesToReturn.size()));
         }
 

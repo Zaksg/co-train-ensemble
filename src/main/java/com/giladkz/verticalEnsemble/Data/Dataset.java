@@ -1245,7 +1245,8 @@ public class Dataset {
         DiscreteColumn targetClassColumn = (DiscreteColumn)getTargetClassColumn().getColumn();
         Collections.sort(indices);
         for (int i=0; i<indices.size(); i++) {
-            arrayToReturn[i] = ((int)targetClassColumn.getValue(i));
+//            arrayToReturn[i] = ((int)targetClassColumn.getValue(i));
+            arrayToReturn[i] = ((int)targetClassColumn.getValue(indices.get(i)));
         }
         return arrayToReturn;
     }

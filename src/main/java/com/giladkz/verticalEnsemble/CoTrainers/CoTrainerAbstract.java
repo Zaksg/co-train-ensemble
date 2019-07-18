@@ -83,9 +83,11 @@ public abstract class CoTrainerAbstract {
         conn.close();
     }
 
-    public void WriteInformationOnAddedItems(HashMap<Integer,HashMap<Integer,Double>> instancesToAddPerClass,
-                                              int inner_iteration, int exp_id,
-                                              int exp_iteration, double weight, HashMap<Integer, List<Integer>> instancesPerPartition, Properties properties, Dataset dataset) throws Exception {
+    public void WriteInformationOnAddedItems(
+            HashMap<Integer,HashMap<Integer,Double>> instancesToAddPerClass
+            , int inner_iteration, int exp_id, int exp_iteration, double weight
+            , HashMap<Integer, List<Integer>> instancesPerPartition, Properties properties
+            , Dataset dataset) throws Exception {
 
         String myDriver = properties.getProperty("JDBC_DRIVER");
         String myUrl = properties.getProperty("DatabaseUrl");
@@ -116,7 +118,8 @@ public abstract class CoTrainerAbstract {
                 preparedStmt.setInt(5, classifierIndex);
                 preparedStmt.setInt(6, instanceIndex);
                 preparedStmt.setInt(7, classIndex);
-                preparedStmt.setInt(8, (classIndex == dataset.getInstancesClassByIndex(Arrays.asList(instanceIndex)).get(instanceIndex)) ? 1 : 0);
+                preparedStmt.setInt(8, (classIndex == dataset.getInstancesClassByIndex(Arrays.asList(instanceIndex))
+                        .get(instanceIndex)) ? 1 : 0);
                 preparedStmt.setDouble(9, instancesToAddPerClass.get(classIndex).get(instanceIndex));
                 preparedStmt.execute();
                 preparedStmt.close();
@@ -221,6 +224,8 @@ public abstract class CoTrainerAbstract {
             }
         }
 
+        //TODO:add requirement that the labeled set will have at least XX (configurable parameter) labels of the minority class. This is needed for highly imbalanced datasets
+
         /*since the number of instances in the "keep ratios" scenario may not reach the required number,
           we'll use the code for the alternative scenario to randomly add additional instances */
         while (labeledTrainingInstancesIndices.size() < requiredNumOfLabeledInstances) {
@@ -244,6 +249,14 @@ public abstract class CoTrainerAbstract {
         double[] arrayToReturn = new double[confidenceScoreDistribution.length];
         for (int i=0; i<confidenceScoreDistribution.length; i++) {
             arrayToReturn[i] = confidenceScoreDistribution[i][index];
+        }
+        return arrayToReturn;
+    }
+
+    public double[] getSingleClassValueConfidenceScore(double[][] confidenceScoreDistribution, int[] classIndices) {
+        double[] arrayToReturn = new double[confidenceScoreDistribution.length];
+        for (int i=0; i<confidenceScoreDistribution.length; i++) {
+            arrayToReturn[i] = confidenceScoreDistribution[i][classIndices[i]];
         }
         return arrayToReturn;
     }
@@ -443,8 +456,9 @@ public abstract class CoTrainerAbstract {
      * @param labeledTrainingSetIndices
      * @throws Exception
      */
-    public void RunExperimentsOnTestSet(int expID, int expIteration, int innerIteration, Dataset dataset, Fold testFold, Fold trainFold, HashMap<Integer,Dataset> datasetPartitions,
-                                        List<Integer> labeledTrainingSetIndices, Properties properties) throws Exception {
+    public void RunExperimentsOnTestSet(int expID, int expIteration, int innerIteration, Dataset dataset, Fold testFold
+            , Fold trainFold, HashMap<Integer,Dataset> datasetPartitions,List<Integer> labeledTrainingSetIndices
+            , Properties properties) throws Exception {
 
         AUC auc = new AUC();
         int[] testFoldLabels = dataset.getTargetClassLabelsByIndex(testFold.getIndices());
@@ -452,7 +466,12 @@ public abstract class CoTrainerAbstract {
         EvaluationInfo evaluationResultsOneClassifier = runClassifier(properties.getProperty("classifier"),
                 dataset.generateSet(FoldsInfo.foldType.Train,labeledTrainingSetIndices),
                 dataset.generateSet(FoldsInfo.foldType.Test,testFold.getIndices()), properties);
-        double oneClassifierAuc = auc.measure(testFoldLabels, getSingleClassValueConfidenceScore(evaluationResultsOneClassifier.getScoreDistributions(),0));
+//        double oneClassifierAuc = auc.measure(testFoldLabels, getSingleClassValueConfidenceScore(evaluationResultsOneClassifier.getScoreDistributions(),testFoldLabels));
+        double oneClassifierAuc = auc.measure(testFoldLabels, getSingleClassValueConfidenceScore(evaluationResultsOneClassifier.getScoreDistributions(),1));
+        //when calculating the AUC for set of only one label - it returns as NaN, so this will fix it to 0
+        if (Double.isNaN(oneClassifierAuc)){
+            oneClassifierAuc = 0.0;
+        }
         HashMap<Double,Double> valuesHashmapOneClass = new HashMap<>();
         valuesHashmapOneClass.put(-1.0, oneClassifierAuc);
         writeTestSetEvaluationResults(expID,expIteration,innerIteration,"one_classifier","auc",-1,
@@ -471,7 +490,11 @@ public abstract class CoTrainerAbstract {
         //here we use averaging to combine the classification results of the partitions
         double[][] averageClassificationResults = calculateAverageClassificationResults(evaluationResultsPerPartition, dataset.getNumOfClasses());
         double averagingAUC = auc.measure(testFoldLabels,
-                getSingleClassValueConfidenceScore(averageClassificationResults,0));
+                getSingleClassValueConfidenceScore(averageClassificationResults,1));
+        //when calculating the AUC for set of only one label - it returns as NaN, so this will fix it to 0
+        if (Double.isNaN(averagingAUC)){
+            averagingAUC = 0.0;
+        }
         HashMap<Double,Double> valuesHashmapAveraging = new HashMap<>();
         valuesHashmapAveraging.put(-1.0,averagingAUC);
         writeTestSetEvaluationResults(expID,expIteration,innerIteration,"averaging","auc",-1,
@@ -481,11 +504,83 @@ public abstract class CoTrainerAbstract {
         double[][] multiplicationClassificationResutls = calculateMultiplicationClassificationResults(evaluationResultsPerPartition,
                 dataset.getNumOfClasses(), dataset.getClassRatios(false)); //we operate under the assumption that the overall ratios are known
         double multiplicationAUC = auc.measure(testFoldLabels,
-                getSingleClassValueConfidenceScore(multiplicationClassificationResutls,0));
+                getSingleClassValueConfidenceScore(multiplicationClassificationResutls,1));
+        //when calculating the AUC for set of only one label - it returns as NaN, so this will fix it to 0
+        if (Double.isNaN(multiplicationAUC)){
+            multiplicationAUC = 0.0;
+        }
         HashMap<Double,Double> valuesHashmapmultiplication = new HashMap<>();
         valuesHashmapmultiplication.put(-1.0,multiplicationAUC);
+        System.out.println("One classifier AUC: " + oneClassifierAuc);
+        System.out.println("AVG classifier AUC: " + averagingAUC);
+        System.out.println("Multiplication classifier AUC: " + multiplicationAUC);
         writeTestSetEvaluationResults(expID,expIteration,innerIteration,"multiplication","auc",-1,
                 valuesHashmapmultiplication,properties);
 
+    }
+
+    public ArrayList<EvaluationInfo> RunExperimentsOnTestSetGetData(int expID, int expIteration, int innerIteration
+            , Dataset dataset, Fold testFold, Fold trainFold, HashMap<Integer,Dataset> datasetPartitions
+            ,List<Integer> labeledTrainingSetIndices, Properties properties) throws Exception{
+
+        ArrayList<EvaluationInfo> res = new ArrayList<>();
+        AUC auc = new AUC();
+        int[] testFoldLabels = dataset.getTargetClassLabelsByIndex(testFold.getIndices());
+        //Test the entire newly-labeled training set on the test set
+        EvaluationInfo evaluationResultsOneClassifier = runClassifier(properties.getProperty("classifier"),
+                dataset.generateSet(FoldsInfo.foldType.Train,labeledTrainingSetIndices),
+                dataset.generateSet(FoldsInfo.foldType.Test,testFold.getIndices()), properties);
+        res.add(evaluationResultsOneClassifier);
+        double oneClassifierAuc = auc.measure(testFoldLabels, getSingleClassValueConfidenceScore(evaluationResultsOneClassifier.getScoreDistributions(),1));
+        //when calculating the AUC for set of only one label - it returns as NaN, so this will fix it to 0
+        if (Double.isNaN(oneClassifierAuc)){
+            oneClassifierAuc = 0.0;
+        }
+        HashMap<Double,Double> valuesHashmapOneClass = new HashMap<>();
+        valuesHashmapOneClass.put(-1.0, oneClassifierAuc);
+        writeTestSetEvaluationResults(expID,expIteration,innerIteration,"one_classifier","auc",-1,
+                valuesHashmapOneClass,properties);
+
+
+        //we train the models on the partitions and applying them to the test set
+        HashMap<Integer,EvaluationInfo> evaluationResultsPerPartition = new HashMap<>();
+        for (int partitionIndex : datasetPartitions.keySet()) {
+            EvaluationInfo evaluationResults = runClassifier(properties.getProperty("classifier"),
+                    datasetPartitions.get(partitionIndex).generateSet(FoldsInfo.foldType.Train,labeledTrainingSetIndices),
+                    datasetPartitions.get(partitionIndex).generateSet(FoldsInfo.foldType.Test,testFold.getIndices()), properties);
+            evaluationResultsPerPartition.put(partitionIndex,evaluationResults);
+            res.add(evaluationResults);
+        }
+
+        //here we use averaging to combine the classification results of the partitions
+        double[][] averageClassificationResults = calculateAverageClassificationResults(evaluationResultsPerPartition, dataset.getNumOfClasses());
+        double averagingAUC = auc.measure(testFoldLabels,
+                getSingleClassValueConfidenceScore(averageClassificationResults,1));
+        //when calculating the AUC for set of only one label - it returns as NaN, so this will fix it to 0
+        if (Double.isNaN(averagingAUC)){
+            averagingAUC = 0.0;
+        }
+        HashMap<Double,Double> valuesHashmapAveraging = new HashMap<>();
+        valuesHashmapAveraging.put(-1.0,averagingAUC);
+        writeTestSetEvaluationResults(expID,expIteration,innerIteration,"averaging","auc",-1,
+                valuesHashmapAveraging,properties);
+
+        //now we use multiplications (the same way the original co-training paper did)
+        double[][] multiplicationClassificationResutls = calculateMultiplicationClassificationResults(evaluationResultsPerPartition,
+                dataset.getNumOfClasses(), dataset.getClassRatios(false)); //we operate under the assumption that the overall ratios are known
+        double multiplicationAUC = auc.measure(testFoldLabels,
+                getSingleClassValueConfidenceScore(multiplicationClassificationResutls,1));
+        //when calculating the AUC for set of only one label - it returns as NaN, so this will fix it to 0
+        if (Double.isNaN(multiplicationAUC)){
+            multiplicationAUC = 0.0;
+        }
+        HashMap<Double,Double> valuesHashmapmultiplication = new HashMap<>();
+        valuesHashmapmultiplication.put(-1.0,multiplicationAUC);
+        System.out.println("One classifier AUC: " + oneClassifierAuc);
+        System.out.println("AVG classifier AUC: " + averagingAUC);
+        System.out.println("Multiplication classifier AUC: " + multiplicationAUC);
+        writeTestSetEvaluationResults(expID,expIteration,innerIteration,"multiplication","auc",-1,
+                valuesHashmapmultiplication,properties);
+        return res;
     }
 }
